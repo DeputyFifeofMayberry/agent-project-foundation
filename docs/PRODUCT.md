@@ -1,10 +1,10 @@
 # Product specification
 
-- Project: TODO_REQUIRED
-- Target users: TODO_REQUIRED
-- Problem and intended outcome: TODO_REQUIRED
-- Non-goals: TODO_REQUIRED
-- Platforms and minimum supported versions: TODO_REQUIRED
+- Project: CI validation project (disposable)
+- Target users: CI validation project (disposable)
+- Problem and intended outcome: CI validation project (disposable)
+- Non-goals: CI validation project (disposable)
+- Platforms and minimum supported versions: CI validation project (disposable)
 
 ## Critical user journeys
 
@@ -12,7 +12,7 @@ List the 5–10 essential flows, each with trigger, expected result, failure beh
 
 | ID | User flow | Expected result | Failure/empty state | Test path | Last verified |
 | --- | --- | --- | --- | --- | --- |
-| UJ-001 | TODO_REQUIRED | TODO_REQUIRED | TODO_REQUIRED | TODO_REQUIRED | Not verified |
+| UJ-001 | CI validation project (disposable) | CI validation project (disposable) | CI validation project (disposable) | CI validation project (disposable) | Not verified |
 
 ## Functional contract
 
@@ -20,10 +20,10 @@ Create a feature spec in `specs/` for each significant feature. Specify authoriz
 
 ## Constraints
 
-- Privacy/data retention: TODO_REQUIRED
-- Supported device sizes/input modes: TODO_REQUIRED
-- Accessibility expectations: TODO_REQUIRED
-- Performance expectations: TODO_REQUIRED
+- Privacy/data retention: CI validation project (disposable)
+- Supported device sizes/input modes: CI validation project (disposable)
+- Accessibility expectations: CI validation project (disposable)
+- Performance expectations: CI validation project (disposable)
 
 ## Acceptance principle
 

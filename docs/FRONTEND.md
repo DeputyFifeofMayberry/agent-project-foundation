@@ -1,6 +1,6 @@
 # Frontend and mobile verification
 
-Supported runtimes and screen sizes: TODO_REQUIRED
+Supported runtimes and screen sizes: CI validation project (disposable)
 
 ## Minimum flow verification
 

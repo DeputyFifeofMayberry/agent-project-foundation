@@ -4,17 +4,17 @@
 
 | Field | Actual observed value |
 | --- | --- |
-| Repository URL and default branch | TODO_REQUIRED |
-| Baseline commit SHA | TODO_REQUIRED |
-| Runtime versions and OS | TODO_REQUIRED |
-| Dependency installation command + result | TODO_REQUIRED |
-| CI / local commands and evidence links | TODO_REQUIRED |
-| Known failing tests before work | TODO_REQUIRED |
-| Critical user journeys with test links | TODO_REQUIRED |
-| Current deploy / rollback method | TODO_REQUIRED |
-| GitHub ruleset status and evidence | TODO_REQUIRED |
-| App-vs-infrastructure classification of each configured check | TODO_REQUIRED |
-| Read-only checkout verification run and evidence | TODO_REQUIRED |
+| Repository URL and default branch | CI validation project (disposable) |
+| Baseline commit SHA | CI validation project (disposable) |
+| Runtime versions and OS | CI validation project (disposable) |
+| Dependency installation command + result | CI validation project (disposable) |
+| CI / local commands and evidence links | CI validation project (disposable) |
+| Known failing tests before work | CI validation project (disposable) |
+| Critical user journeys with test links | CI validation project (disposable) |
+| Current deploy / rollback method | CI validation project (disposable) |
+| GitHub ruleset status and evidence | CI validation project (disposable) |
+| App-vs-infrastructure classification of each configured check | CI validation project (disposable) |
+| Read-only checkout verification run and evidence | CI validation project (disposable) |
 
 Never declare an existing project stable merely because it builds. Distinguish observed failures that predate the foundation from regressions introduced during adoption. Recheck this table when baseline assumptions change.
 

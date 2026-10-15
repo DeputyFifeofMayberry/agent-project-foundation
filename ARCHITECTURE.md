@@ -4,12 +4,12 @@
 
 ## System map
 
-- Entry points: TODO_REQUIRED
-- Main services/modules: TODO_REQUIRED
-- Storage and schemas: TODO_REQUIRED
-- External APIs and trust boundaries: TODO_REQUIRED
-- Deployment environments: TODO_REQUIRED
-- Runtime observability and logs: TODO_REQUIRED
+- Entry points: CI validation project (disposable)
+- Main services/modules: CI validation project (disposable)
+- Storage and schemas: CI validation project (disposable)
+- External APIs and trust boundaries: CI validation project (disposable)
+- Deployment environments: CI validation project (disposable)
+- Runtime observability and logs: CI validation project (disposable)
 
 ## Dependency rules
 

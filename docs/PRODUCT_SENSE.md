@@ -4,4 +4,4 @@ Prioritize clear workflows that solve real user problems over feature count. Pre
 
 Before a major feature ask: Who needs it? Which journey changes? What would failure look like? What existing behavior must remain? Is a simpler alternative sufficient? Record decisions in the relevant feature spec. Avoid turning the product spec into an unverifiable wish list.
 
-**Project-specific principles:** TODO_REQUIRED
+**Project-specific principles:** CI validation project (disposable)

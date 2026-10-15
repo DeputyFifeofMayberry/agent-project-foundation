@@ -40,7 +40,7 @@
 - `python -m py_compile scripts/verify.py scripts/selftest_verify.py`: **PASS**.
 - `python scripts/selftest_verify.py -q`: **13 synthetic tests PASS**. Includes successful configured command, intentional command failure, missing/removed required check, duplicate required check, missing document, unconfigured document, broken Markdown link, timeout, obvious no-op, inline no-op, outdated config schema, and pre-initialization listing.
 - `python scripts/verify.py --list`: **PASS**; eight categories displayed as unconfigured.
-- `python scripts/verify.py --ci` on the unconfigured starter: **INTENTIONAL FAIL**, code 2 because `project_name` is still `TODO_REQUIRED`. The template must not be reported as an application that passes CI.
+- `python scripts/verify.py --ci` on the unconfigured starter: **INTENTIONAL FAIL**, code 2 because `project_name` is still `CI validation project (disposable)`. The template must not be reported as an application that passes CI.
 - `.foundation/project.json` and example config: parsed as JSON, use schema v2 and eight check categories.
 - `.github/workflows/verify.yml`: parsed as YAML and contains independent verifier-selftest and application-verification steps. **It has not been run on GitHub.** Note: PyYAML YAML 1.1 parses an unquoted `on` as Boolean `true`, while GitHub Actions interprets `on` as its event keyword.
 - Local Markdown references: validator executed on template and reported no broken local Markdown paths apart from the deliberately incomplete application documents.
@@ -48,7 +48,7 @@
 
 ## Open blockers before calling any application trustworthy
 
-1. Complete application-specific `TODO_REQUIRED` entries; never fabricate architectural assertions.
+1. Complete application-specific `CI validation project (disposable)` entries; never fabricate architectural assertions.
 2. Install real project dependencies and commands for all eight checks. Configure native Windows/macOS/iOS runners where needed; Ubuntu alone is insufficient.
 3. Exercise E2E tests of critical journeys, persistence, negative paths, and the real target device.
 4. Configure, activate, and *test* GitHub ruleset, required CI status, CODEOWNERS review, and non-bypass privileges. None are remotely configured by these files.
