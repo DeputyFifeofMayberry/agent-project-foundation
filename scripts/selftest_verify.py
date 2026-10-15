@@ -110,12 +110,16 @@ class VerifierTests(unittest.TestCase):
     def test_not_applicable_empty_reason_fails(self):
         self.cfg['not_applicable'] = {'docs/DESIGN.md': '   '}
         self.save()
-        self.assertNotEqual(self.run_verify('--check', 'unit').returncode, 0)
+        result = self.run_verify('--check', 'unit')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('not_applicable', result.stderr)
 
     def test_not_applicable_non_whitelisted_path_fails(self):
         self.cfg['not_applicable'] = {'docs/SECURITY.md': 'Handled by the platform security team.'}
         self.save()
-        self.assertNotEqual(self.run_verify('--check', 'unit').returncode, 0)
+        result = self.run_verify('--check', 'unit')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('not_applicable', result.stderr)
 
     def test_not_applicable_with_todo_content_fails(self):
         (self.root/'docs/DESIGN.md').write_text('TODO_REQUIRED', encoding='utf-8')
@@ -126,7 +130,9 @@ class VerifierTests(unittest.TestCase):
     def test_not_applicable_malformed_object_fails(self):
         self.cfg['not_applicable'] = ['docs/DESIGN.md']
         self.save()
-        self.assertNotEqual(self.run_verify('--check', 'unit').returncode, 0)
+        result = self.run_verify('--check', 'unit')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('not_applicable', result.stderr)
 
     def test_todo_document(self):
         (self.root/'docs/DESIGN.md').write_text('TODO_REQUIRED', encoding='utf-8')
