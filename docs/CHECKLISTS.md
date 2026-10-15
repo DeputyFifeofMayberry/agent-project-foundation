@@ -52,14 +52,18 @@ Established after LOC-33/LOC-34 (fifecode-ios): a workspace whose working tree i
 
 ### Disposable staging/commit test
 
-Prove staging and committing on a disposable branch (or a disposable clone when the target branch is protected/shared), record the outputs, then discard the probe:
+Prove staging and committing on a disposable branch (or a disposable clone when the target branch is protected/shared), record the outputs, then discard the probe. Preconditions: proceed only when the working tree is clean or the dirty state is explicitly recorded and restored after the probe, and require an empty staging area via `git diff --cached --quiet`; otherwise abort **BLOCKED** instead of running the probe. Record the branch `HEAD` refers to before creating the probe branch and abort if `HEAD` is detached:
 
 ```bash
+git diff --cached --quiet || { echo 'BLOCKED: staging area not empty' >&2; exit 1; }
+orig_ref=$(git rev-parse --abbrev-ref HEAD) || { echo 'BLOCKED: detached HEAD' >&2; exit 1; }
 git checkout -b preflight-probe
 echo probe > PROBE.txt
-git add PROBE.txt && git commit -m "preflight probe"   # must succeed; record SHA
-git checkout - && git branch -D preflight-probe         # discard probe; workspace returns to baseline
+git add PROBE.txt && git commit -m "preflight probe" -- PROBE.txt   # path-limited commit; must succeed; record SHA
+git checkout "$orig_ref" && git branch -D preflight-probe           # discard probe; workspace returns to baseline
 ```
+
+Each safeguard prevents a specific failure mode. The empty-staging precondition (plus explicitly recording any dirty state and restoring it afterward) prevents the probe from sweeping pre-existing staged or unstaged work into its commit or deleting it with the probe branch. The path-limited `-- PROBE.txt` commit ensures pre-staged work can never be swallowed by the probe commit even if the precondition check was skipped. Recording `orig_ref` up front and returning via `git checkout "$orig_ref"` — never `git checkout -` — prevents the workspace from being left on the probe branch or on whichever branch `-` happens to resolve to, and the detached-HEAD abort prevents a probe that has no defined return point.
 
 Use a designated persistent scratch location for any disposable clone (never a read-only or per-run temp path). A probe that succeeds elsewhere does not certify the target workspace — checks 3–4 must still pass there.
 
