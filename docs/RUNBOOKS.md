@@ -19,4 +19,4 @@ Stabilize or roll back, record timing and symptoms, preserve logs, reproduce, fi
 
 ## Existing app adoption
 
-Read `docs/USER_GUIDE.md`. Take an inventory before introducing large refactors. Preserve existing build commands, test files, instruction files, CI and secrets. Document the real current architecture, known failing tests, and baseline. Establish the first 3–5 smoke journeys and gradually expand them toward the 5–10 essential flows in `docs/PRODUCT.md`; do not use a foundation migration as an excuse to rewrite a functioning app.
+Follow the single ordered inspect-first procedure in `docs/ADOPTION.md` (read-only inventory before any refactor; existing conventions and instruction files are merged, not overwritten). Start with 3–5 smoke journeys and grow them toward the 5–10 essential flows in `docs/PRODUCT.md`; a foundation migration is never a license to rewrite a functioning app.
