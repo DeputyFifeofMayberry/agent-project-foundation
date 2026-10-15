@@ -44,7 +44,7 @@
 - `.foundation/project.json` and example config: parsed as JSON, use schema v2 and eight check categories.
 - `.github/workflows/verify.yml`: parsed as YAML and contains independent verifier-selftest and application-verification steps. **It has not been run on GitHub.** Note: PyYAML YAML 1.1 parses an unquoted `on` as Boolean `true`, while GitHub Actions interprets `on` as its event keyword.
 - Local Markdown references: validator executed on template and reported no broken local Markdown paths apart from the deliberately incomplete application documents.
-- Zip archive integrity: verified after archive creation (see packaging log in final response).
+- Zip archive integrity: verified after archive creation (see packaging log in final response). **Historical:** the v2.0-era ZIP deliverable model is retired as of v2.2; audit corrections now ship through the `docs/HARNESS_MAINTENANCE.md` review-and-release path in the foundation repository, not as archives.
 
 ## Open blockers before calling any application trustworthy
 

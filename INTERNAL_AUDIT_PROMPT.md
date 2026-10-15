@@ -22,13 +22,13 @@ Act as an independent staff engineer, security reviewer, QA lead, release engine
 
 ## F — Format
 
-Return `AUDIT_REPORT.md` (complete inventory and findings), `RESEARCH_DECISION.md` (source-backed decision and uncertainty), corrected project files, and a self-contained ZIP archive. Provide concise instructions for a first run. All claimed checks must show exactly what was executed and its outcome.
+Return `AUDIT_REPORT.md` (complete inventory and findings), `RESEARCH_DECISION.md` (source-backed decision and uncertainty), and corrected project files as a reviewed working state of the foundation repository. Deliver through the `docs/HARNESS_MAINTENANCE.md` release path — independent review plus QA, then a verified commit eligible for an annotated release tag — not as a ZIP or ad-hoc archive. Provide concise instructions for a first run. All claimed checks must show exactly what was executed and its outcome.
 
 ## T — Test / acceptance criteria
 
 - Every file inventoried and verified as valid/useful or revised/removal documented.
 - No unsupported claims of runtime-enforced behavior or vendor superiority.
-- Python parses, JSON schemas validate, YAML structure is plausible, Markdown links resolve locally, ZIP lists exact files.
+- Python parses, JSON schemas validate, YAML structure is plausible, Markdown links resolve locally, and the corrected working tree contains exactly the intended files (no stray archive or temporary artifacts).
 - Test harness rejects meaningful negative cases and passes the synthetic positive fixture.
 - Untailored starter intentionally fails project CI (not ready for production).
 - Orchestrator not claimed installed or tested; external branch rules not claimed enabled.
