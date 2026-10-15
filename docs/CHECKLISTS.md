@@ -39,7 +39,7 @@ Unverified assumptions; insufficient test coverage; failure of mandatory checks;
 
 ## Git-workspace preflight (permanent standard)
 
-Established after LOC-33/LOC-34 (fifecode-ios): a workspace whose working tree is writable but whose git metadata sits on a read-only mount silently blocks staging (`index.lock: Read-only file system`), so "files written" is not evidence that a commit is possible. Run all eight checks **before** implementation, and re-run whenever the workspace, its mount, or host environment changes:
+Established after a production incident: a workspace whose working tree was writable but whose git metadata sat on a read-only mount silently blocked staging (`index.lock: Read-only file system`), so "files written" is not evidence that a commit is possible. (Organization-internal ticket identifiers for this incident are recorded in the foundation `CHANGELOG.md` provenance only.) Run all eight checks **before** implementation, and re-run whenever the workspace, its mount, or host environment changes:
 
 1. **Valid HEAD** — `git rev-parse HEAD` resolves to a real commit; record the SHA and expect it to match the task's authorized baseline.
 2. **Execution workspace exists** — the assigned workspace path is the intended checkout/clone (not an empty default agent directory); confirm the intended branch.
