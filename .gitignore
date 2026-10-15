@@ -1,12 +1,90 @@
+# Environment files and secrets
 .env
 .env.*
+.env_*
 !.env.example
-*.log
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+.netrc
+.npmrc.local
+*_credentials.json
+*credentials*.txt
+
+# Python
 __pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.venv/
+venv/
 .pytest_cache/
+.mypy_cache/
+.pytype/
+.ruff_cache/
+.tox/
+.nox/
+.hypothesis/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Node.js
 node_modules/
-dist/
-build/
-coverage/
+.eslintcache
+*.tsbuildinfo
+.parcel-cache/
+.vite/
+.next/
+.nuxt/
+.output/
+.turbo/
+.cache/
+
+# Swift / Xcode (native iOS and macOS stack)
+.build/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+*.xcresult
+Pods/
+
+# Logs, temporary files, profiling, reports, scratch
+*.log
+logs/
+*.tmp
+*.swp
+*.swo
+*.prof
+*.profraw
+*.lprof
+/scratch/
+/tmp/
+
+# Operating systems: macOS, Windows, Linux/WSL
 .DS_Store
-*.pyc
+._*
+.AppleDouble
+.Spotlight-V100
+.Trashes
+Desktop.ini
+Thumbs.db
+$RECYCLE.BIN/
+*~
+.directory
+
+# Editors and IDEs (local state only; intentionally shared config stays tracked)
+.vscode/*
+!.vscode/settings.json
+.idea/
+*.iml
+
+# Local agent/orchestration runtime state (shared configs stay tracked)
+.paperclip/
+.claude/settings.local.json
+.claude/todos/
+.opencode/local/
