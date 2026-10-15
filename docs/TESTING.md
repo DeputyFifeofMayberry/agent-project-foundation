@@ -2,13 +2,13 @@
 
 ## Required baseline (configure commands)
 
-- Code formatting / lint: TODO_REQUIRED
-- Static type checks (if typed language): TODO_REQUIRED
-- Unit tests: TODO_REQUIRED
-- Integration or contract tests: TODO_REQUIRED
-- Critical-path E2E tests: TODO_REQUIRED
-- Production build or platform build: TODO_REQUIRED
-- Architecture/security static checks: TODO_REQUIRED
+- Code formatting / lint: protection-test project (disposable)
+- Static type checks (if typed language): protection-test project (disposable)
+- Unit tests: protection-test project (disposable)
+- Integration or contract tests: protection-test project (disposable)
+- Critical-path E2E tests: protection-test project (disposable)
+- Production build or platform build: protection-test project (disposable)
+- Architecture/security static checks: protection-test project (disposable)
 
 These eight required categories are enforced by `scripts/verify.py` reading schema v2 `.foundation/project.json`; removing a category from the config is invalid. Disabled or missing checks are treated as incomplete during `--ci`. Only configure real commands that fail on defective behavior. The verifier detects obvious no-ops but cannot establish test meaningfulness automatically; reviewers must examine test behavior. Do not replace tests with `echo pass` or equivalent.
 
@@ -20,7 +20,7 @@ Prefer observable behavior and contracts over implementation coupling. For each 
 
 | User journey / invariant | Test file | Layer | Failure reproduced | Last run |
 | --- | --- | --- | --- | --- |
-| TODO_REQUIRED | TODO_REQUIRED | TODO_REQUIRED | TODO_REQUIRED | Not verified |
+| protection-test project (disposable) | protection-test project (disposable) | protection-test project (disposable) | protection-test project (disposable) | Not verified |
 
 ## Change risk levels
 

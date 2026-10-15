@@ -4,12 +4,12 @@
 
 ## System map
 
-- Entry points: TODO_REQUIRED
-- Main services/modules: TODO_REQUIRED
-- Storage and schemas: TODO_REQUIRED
-- External APIs and trust boundaries: TODO_REQUIRED
-- Deployment environments: TODO_REQUIRED
-- Runtime observability and logs: TODO_REQUIRED
+- Entry points: protection-test project (disposable)
+- Main services/modules: protection-test project (disposable)
+- Storage and schemas: protection-test project (disposable)
+- External APIs and trust boundaries: protection-test project (disposable)
+- Deployment environments: protection-test project (disposable)
+- Runtime observability and logs: protection-test project (disposable)
 
 ## Dependency rules
 

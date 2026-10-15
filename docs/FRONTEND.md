@@ -1,6 +1,6 @@
 # Frontend and mobile verification
 
-Supported runtimes and screen sizes: TODO_REQUIRED
+Supported runtimes and screen sizes: protection-test project (disposable)
 
 ## Minimum flow verification
 

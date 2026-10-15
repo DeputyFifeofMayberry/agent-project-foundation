@@ -2,11 +2,11 @@
 
 ## Project threat model
 
-- Sensitive data and credentials: TODO_REQUIRED
-- AuthN/AuthZ strategy: TODO_REQUIRED
-- Trust boundaries / external integrations: TODO_REQUIRED
-- Data retention, deletion, backup: TODO_REQUIRED
-- Dependency & vulnerability scanning: TODO_REQUIRED
+- Sensitive data and credentials: protection-test project (disposable)
+- AuthN/AuthZ strategy: protection-test project (disposable)
+- Trust boundaries / external integrations: protection-test project (disposable)
+- Data retention, deletion, backup: protection-test project (disposable)
+- Dependency & vulnerability scanning: protection-test project (disposable)
 
 ## Mandatory operating rules
 

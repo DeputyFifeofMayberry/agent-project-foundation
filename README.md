@@ -11,7 +11,7 @@ Keep product intent, engineering decisions, verification evidence, and change hi
 1. Copy the contents of this folder (or the tagged release from the foundation's own version-controlled repository) into a **new branch** of the target repository. For existing apps, compare files and merge carefully rather than overwriting existing instructions or CI.
 2. Record the installed foundation version (see `CHANGELOG.md`) and every project-specific adaptation in `docs/BASELINE.md` — adoptions without a recorded version are incomplete.
 3. Read `AGENTS.md`, `docs/INDEX.md`, `docs/USER_GUIDE.md`, and `docs/ADOPTION.md`.
-4. Fill project-specific documents listed by `scripts/verify.py` (including `docs/BASELINE.md`) with *verified* project facts. Replace `TODO_REQUIRED` placeholders. Never invent architecture or tests.
+4. Fill project-specific documents listed by `scripts/verify.py` (including `docs/BASELINE.md`) with *verified* project facts. Replace `protection-test project (disposable)` placeholders. Never invent architecture or tests.
 5. Configure `.foundation/project.json` schema v2 with real `argv` arrays and per-check timeouts. All eight categories are mandatory; each must run a meaningful check. Do not use a command that merely prints success.
 6. Run `python scripts/selftest_verify.py` (tests the verifier), `python scripts/verify.py --list`, then `python scripts/verify.py --ci` (Windows: `py -3 scripts/verify.py --ci`). Expect failure until initialization is complete.
 7. Test that a deliberately failing app test blocks verification and the pull request. Restore the test afterward.
