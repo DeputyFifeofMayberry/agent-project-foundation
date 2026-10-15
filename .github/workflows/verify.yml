@@ -6,6 +6,25 @@ on:
 permissions:
   contents: read
 jobs:
+  # Foundation-maintenance verification: passes when the reusable foundation
+  # itself is valid (verifier correctness with real positive and negative
+  # fixtures). This is the stable green check for this repository.
+  maintenance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Verifier self-test (positive and negative fixtures)
+        run: python scripts/selftest_verify.py
+      - name: Foundation configuration sanity
+        run: python scripts/verify.py --list
+  # Adopter-application verification: intentionally fails until a project
+  # configures real project_name, commands, and tests (fail-closed template).
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 60
