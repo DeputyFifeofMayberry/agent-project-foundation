@@ -12,6 +12,7 @@ BASE = Path(__file__).resolve().parents[1]
 NAMES = ('lint', 'typecheck', 'unit', 'integration', 'e2e', 'build', 'security', 'architecture')
 REQUIRED_DOCS = (
     'AGENTS.md', 'README.md', 'docs/USER_GUIDE.md', 'docs/INDEX.md', 'docs/CHECKLISTS.md',
+    'CHANGELOG.md', 'docs/RUNBOOKS.md', 'docs/REVIEW_EVIDENCE.md', 'docs/TECH_DEBT.md',
     'ARCHITECTURE.md', 'docs/BASELINE.md', 'docs/PRODUCT.md', 'docs/PRODUCT_SENSE.md',
     'docs/DESIGN.md', 'docs/FRONTEND.md', 'docs/TESTING.md',
     'docs/SECURITY.md', 'docs/RELIABILITY.md', 'docs/QUALITY_SCORE.md',
@@ -78,6 +79,22 @@ class VerifierTests(unittest.TestCase):
 
     def test_missing_document(self):
         (self.root/'docs/SECURITY.md').unlink()
+        self.assertNotEqual(self.run_verify('--check', 'unit').returncode, 0)
+
+    def test_missing_changelog(self):
+        (self.root/'CHANGELOG.md').unlink()
+        self.assertNotEqual(self.run_verify('--check', 'unit').returncode, 0)
+
+    def test_missing_runbooks(self):
+        (self.root/'docs/RUNBOOKS.md').unlink()
+        self.assertNotEqual(self.run_verify('--check', 'unit').returncode, 0)
+
+    def test_missing_review_evidence(self):
+        (self.root/'docs/REVIEW_EVIDENCE.md').unlink()
+        self.assertNotEqual(self.run_verify('--check', 'unit').returncode, 0)
+
+    def test_missing_tech_debt(self):
+        (self.root/'docs/TECH_DEBT.md').unlink()
         self.assertNotEqual(self.run_verify('--check', 'unit').returncode, 0)
 
     def test_todo_document(self):

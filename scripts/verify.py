@@ -26,6 +26,7 @@ PROJECT_DOCS = (
 )
 MANDATORY_DOCS = (
     'AGENTS.md', 'README.md', 'docs/USER_GUIDE.md', 'docs/INDEX.md', 'docs/CHECKLISTS.md',
+    'CHANGELOG.md', 'docs/RUNBOOKS.md', 'docs/REVIEW_EVIDENCE.md', 'docs/TECH_DEBT.md',
     *PROJECT_DOCS,
 )
 MAX_TIMEOUT_SECONDS = 7200
