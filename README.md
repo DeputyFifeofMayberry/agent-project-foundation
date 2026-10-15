@@ -8,7 +8,7 @@ Keep product intent, engineering decisions, verification evidence, and change hi
 
 ## Start here
 
-1. **New repositories:** copy the contents of this folder (or the tagged release from the foundation's own version-controlled repository) into a **new branch** of the target repository. **Existing repositories:** do not copy-paste; run the inspect-first procedure in `docs/ADOPTION.md`.
+1. **New repositories:** copy the contents of this folder (or the tagged release from the foundation's own version-controlled repository) into a **new branch** of the target repository, **except the foundation-meta files you should not copy into a product repo:** `AUDIT_REPORT.md`, `INTERNAL_AUDIT_PROMPT.md`, `RESEARCH_DECISION.md`, and `examples/` (see `docs/COMPONENTS.md`, optional table). **Existing repositories:** do not copy-paste; run the inspect-first procedure in `docs/ADOPTION.md`.
 2. Record the installed foundation version (see `CHANGELOG.md`) and every project-specific adaptation in `docs/BASELINE.md` — adoptions without a recorded version are incomplete.
 3. Read `AGENTS.md`, `docs/INDEX.md`, `docs/USER_GUIDE.md`, and `docs/ADOPTION.md`.
 4. Fill project-specific documents listed by `scripts/verify.py` (including `docs/BASELINE.md`) with *verified* project facts. Replace `TODO_REQUIRED` placeholders. Never invent architecture or tests.
