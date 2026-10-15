@@ -12,3 +12,5 @@ Supported runtimes and screen sizes: TODO_REQUIRED
 6. Capture proof (test report, screenshot or video) for major UI changes and tie it to the tested commit/environment.
 
 **Tool selection:** Playwright for browser/Electron renderer paths when appropriate; platform-specific automated tooling for iOS and OS integrations. Browser E2E is not a substitute for native iOS integration tests. Add stack-specific commands to `TESTING.md` and `.foundation/project.json`.
+
+**Optional (preferred where feasible):** for UI projects, making the app bootable per worktree — so each isolated worktree can build and launch the real app and an agent can drive the actual flow — is the preferred verification posture; static analysis or mocked checks alone are the fallback, not the standard.

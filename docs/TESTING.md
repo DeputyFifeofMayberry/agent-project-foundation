@@ -16,6 +16,8 @@ These eight required categories are enforced by `scripts/verify.py` reading sche
 
 Prefer observable behavior and contracts over implementation coupling. For each prior regression, preserve a test reproducing the failure unless technically impossible and explicitly documented. Isolate external integrations using deterministic fixtures; add a smaller number of controlled end-to-end smoke tests against real integrations when warranted.
 
+Optional for UI projects: where feasible, the preferred verification posture is a bootable app per worktree — each isolated worktree can build and launch the real application so an agent can drive the actual user flow rather than reasoning over mocks (`docs/FRONTEND.md`).
+
 ## Test inventory
 
 | User journey / invariant | Test file | Layer | Failure reproduced | Last run |
