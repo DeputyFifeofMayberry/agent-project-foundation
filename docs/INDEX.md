@@ -22,6 +22,8 @@ The repository, not a chat transcript, is the durable source of truth. Review ea
 | Harness upkeep | `HARNESS_MAINTENANCE.md` | Monthly or each release |
 | Component inventory (required/stack-conditional/optional) | `COMPONENTS.md` | During adoption and when adding or changing components |
 | Stack-specific minimum verification sets | `STACKS.md` | When choosing a stack or configuring checks |
+| Change checklists and verification-by-design rules | `CHECKLISTS.md` | When gate/checklist policy changes |
+| Foundation meta (setup, audit, research, examples) | `../SETUP_PROMPT.md`, `../INTERNAL_AUDIT_PROMPT.md`, `../AUDIT_REPORT.md`, `../RESEARCH_DECISION.md`, `../examples/` — classified in the `COMPONENTS.md` optional table | Foundation release or audit activity |
 
 ## Permanent engineering standards (foundation governance)
 
