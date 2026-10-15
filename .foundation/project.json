@@ -1,0 +1,48 @@
+{
+  "schema_version": 2,
+  "project_name": "TODO_REQUIRED",
+  "checks": {
+    "lint": {
+      "argv": [],
+      "timeout_seconds": 900
+    },
+    "typecheck": {
+      "argv": [],
+      "timeout_seconds": 900
+    },
+    "unit": {
+      "argv": [],
+      "timeout_seconds": 900
+    },
+    "integration": {
+      "argv": [],
+      "timeout_seconds": 900
+    },
+    "e2e": {
+      "argv": [],
+      "timeout_seconds": 900
+    },
+    "build": {
+      "argv": [],
+      "timeout_seconds": 900
+    },
+    "security": {
+      "argv": [],
+      "timeout_seconds": 900
+    },
+    "architecture": {
+      "argv": [],
+      "timeout_seconds": 900
+    }
+  },
+  "required_ci_checks": [
+    "lint",
+    "typecheck",
+    "unit",
+    "integration",
+    "e2e",
+    "build",
+    "security",
+    "architecture"
+  ]
+}

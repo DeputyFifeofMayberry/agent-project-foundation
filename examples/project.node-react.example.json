@@ -1,0 +1,80 @@
+{
+  "schema_version": 2,
+  "project_name": "my-react-app",
+  "checks": {
+    "lint": {
+      "argv": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "timeout_seconds": 900
+    },
+    "typecheck": {
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "timeout_seconds": 900
+    },
+    "unit": {
+      "argv": [
+        "npm",
+        "run",
+        "test:unit"
+      ],
+      "timeout_seconds": 900
+    },
+    "integration": {
+      "argv": [
+        "npm",
+        "run",
+        "test:integration"
+      ],
+      "timeout_seconds": 900
+    },
+    "e2e": {
+      "argv": [
+        "npm",
+        "run",
+        "test:e2e"
+      ],
+      "timeout_seconds": 1800
+    },
+    "build": {
+      "argv": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "timeout_seconds": 1800
+    },
+    "security": {
+      "argv": [
+        "npm",
+        "run",
+        "security:check"
+      ],
+      "timeout_seconds": 900
+    },
+    "architecture": {
+      "argv": [
+        "npm",
+        "run",
+        "arch:check"
+      ],
+      "timeout_seconds": 900
+    }
+  },
+  "required_ci_checks": [
+    "lint",
+    "typecheck",
+    "unit",
+    "integration",
+    "e2e",
+    "build",
+    "security",
+    "architecture"
+  ]
+}

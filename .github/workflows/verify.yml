@@ -1,0 +1,25 @@
+name: Quality gate
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Verify the verifier
+        run: python scripts/selftest_verify.py
+      # REQUIRED: Install project-specific toolchains and dependencies here.
+      # For native iOS/Windows tests add protected macOS/Windows jobs and require them.
+      # This template must remain RED until project facts, commands, and tests exist.
+      - name: Verify the application
+        run: python scripts/verify.py --ci

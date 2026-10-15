@@ -1,0 +1,119 @@
+#!/usr/bin/env python3
+"""Adversarial regression tests for the project verifier; no real repo files edited."""
+from __future__ import annotations
+import json
+from pathlib import Path
+import subprocess
+import sys
+import tempfile
+import unittest
+
+BASE = Path(__file__).resolve().parents[1]
+NAMES = ('lint', 'typecheck', 'unit', 'integration', 'e2e', 'build', 'security', 'architecture')
+REQUIRED_DOCS = (
+    'AGENTS.md', 'README.md', 'docs/USER_GUIDE.md', 'docs/INDEX.md', 'docs/CHECKLISTS.md',
+    'ARCHITECTURE.md', 'docs/BASELINE.md', 'docs/PRODUCT.md', 'docs/PRODUCT_SENSE.md',
+    'docs/DESIGN.md', 'docs/FRONTEND.md', 'docs/TESTING.md',
+    'docs/SECURITY.md', 'docs/RELIABILITY.md', 'docs/QUALITY_SCORE.md',
+)
+
+class VerifierTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        for rel in REQUIRED_DOCS:
+            path = self.root / rel
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text('# Configured\nReal project-specific content.\n', encoding='utf-8')
+        script = self.root/'scripts/verify.py'
+        script.parent.mkdir(parents=True, exist_ok=True)
+        script.write_bytes((BASE/'scripts/verify.py').read_bytes())
+        for filename, content in {
+            'check_ok.py': 'raise SystemExit(0)\n',
+            'check_bad.py': 'raise SystemExit(9)\n',
+            'check_wait.py': 'import time; time.sleep(3)\n',
+        }.items():
+            (self.root/filename).write_text(content, encoding='utf-8')
+        self.config_path = self.root/'.foundation/project.json'
+        self.config_path.parent.mkdir(parents=True)
+        self.cfg = {
+            'schema_version': 2, 'project_name': 'example',
+            'checks': {name: {'argv': [sys.executable, 'check_ok.py'], 'timeout_seconds': 4} for name in NAMES},
+            'required_ci_checks': list(NAMES),
+        }
+        self.save()
+
+    def save(self):
+        self.config_path.write_text(json.dumps(self.cfg), encoding='utf-8')
+
+    def run_verify(self, *args):
+        return subprocess.run([sys.executable, str(self.root/'scripts/verify.py'), *args], capture_output=True, text=True)
+
+    def test_success(self):
+        result = self.run_verify('--ci')
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertGreaterEqual(result.stdout.count('PASS '), 8)
+
+    def test_failing_command(self):
+        self.cfg['checks']['e2e']['argv'] = [sys.executable, 'check_bad.py']
+        self.save()
+        self.assertNotEqual(self.run_verify('--ci').returncode, 0)
+
+    def test_unconfigured_command(self):
+        self.cfg['checks']['unit']['argv'] = []
+        self.save()
+        self.assertNotEqual(self.run_verify('--ci').returncode, 0)
+
+    def test_cannot_drop_required_gate(self):
+        del self.cfg['checks']['e2e']
+        self.cfg['required_ci_checks'].remove('e2e')
+        self.save()
+        self.assertNotEqual(self.run_verify('--ci').returncode, 0)
+
+    def test_cannot_duplicate_check(self):
+        self.cfg['required_ci_checks'][-1] = 'unit'
+        self.save()
+        self.assertNotEqual(self.run_verify('--ci').returncode, 0)
+
+    def test_missing_document(self):
+        (self.root/'docs/SECURITY.md').unlink()
+        self.assertNotEqual(self.run_verify('--check', 'unit').returncode, 0)
+
+    def test_todo_document(self):
+        (self.root/'docs/DESIGN.md').write_text('TODO_REQUIRED', encoding='utf-8')
+        self.assertNotEqual(self.run_verify('--check','unit').returncode, 0)
+
+    def test_broken_local_link(self):
+        (self.root/'README.md').write_text('[Missing](docs/does-not-exist.md)\n', encoding='utf-8')
+        self.assertNotEqual(self.run_verify('--check', 'unit').returncode, 0)
+
+    def test_timeout(self):
+        self.cfg['checks']['unit'] = {'argv':[sys.executable,'check_wait.py'], 'timeout_seconds':1}
+        self.save()
+        result = self.run_verify('--check','unit')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('timed out', result.stderr)
+
+    def test_reject_noop(self):
+        self.cfg['checks']['build']['argv'] = ['echo', 'OK']
+        self.save()
+        self.assertNotEqual(self.run_verify('--ci').returncode, 0)
+
+    def test_reject_inline_noop(self):
+        self.cfg['checks']['build']['argv'] = [sys.executable,'-c','print(1)']
+        self.save()
+        self.assertNotEqual(self.run_verify('--ci').returncode, 0)
+
+    def test_bad_schema(self):
+        self.cfg['schema_version'] = 1
+        self.save()
+        self.assertNotEqual(self.run_verify('--ci').returncode, 0)
+
+    def test_list_available_before_initialization(self):
+        self.cfg['project_name'] = 'TODO_REQUIRED'
+        self.save()
+        self.assertEqual(self.run_verify('--list').returncode, 0)
+
+if __name__ == '__main__':
+    unittest.main(verbosity=2)

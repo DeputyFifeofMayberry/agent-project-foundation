@@ -1,0 +1,10 @@
+# Copy to .github/CODEOWNERS and replace @YOUR_GITHUB_USERNAME; remove this example.
+# CODEOWNERS alone does not enforce required review. Enable code-owner review in branch ruleset.
+/.foundation/ @YOUR_GITHUB_USERNAME
+/.github/workflows/ @YOUR_GITHUB_USERNAME
+/scripts/verify.py @YOUR_GITHUB_USERNAME
+/scripts/selftest_verify.py @YOUR_GITHUB_USERNAME
+/AGENTS.md @YOUR_GITHUB_USERNAME
+/docs/agents/ @YOUR_GITHUB_USERNAME
+/docs/TESTING.md @YOUR_GITHUB_USERNAME
+/docs/SECURITY.md @YOUR_GITHUB_USERNAME
