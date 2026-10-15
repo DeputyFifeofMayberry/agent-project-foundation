@@ -97,6 +97,37 @@ class VerifierTests(unittest.TestCase):
         (self.root/'docs/TECH_DEBT.md').unlink()
         self.assertNotEqual(self.run_verify('--check', 'unit').returncode, 0)
 
+    def test_not_applicable_headless_pass(self):
+        (self.root/'docs/DESIGN.md').unlink()
+        (self.root/'docs/FRONTEND.md').unlink()
+        self.cfg['not_applicable'] = {
+            'docs/DESIGN.md': 'Headless service; no user interface surface.',
+            'docs/FRONTEND.md': 'API-only project; no frontend runtime.',
+        }
+        self.save()
+        self.assertEqual(self.run_verify('--ci').returncode, 0)
+
+    def test_not_applicable_empty_reason_fails(self):
+        self.cfg['not_applicable'] = {'docs/DESIGN.md': '   '}
+        self.save()
+        self.assertNotEqual(self.run_verify('--check', 'unit').returncode, 0)
+
+    def test_not_applicable_non_whitelisted_path_fails(self):
+        self.cfg['not_applicable'] = {'docs/SECURITY.md': 'Handled by the platform security team.'}
+        self.save()
+        self.assertNotEqual(self.run_verify('--check', 'unit').returncode, 0)
+
+    def test_not_applicable_with_todo_content_fails(self):
+        (self.root/'docs/DESIGN.md').write_text('TODO_REQUIRED', encoding='utf-8')
+        self.cfg['not_applicable'] = {'docs/DESIGN.md': 'No UI planned.'}
+        self.save()
+        self.assertNotEqual(self.run_verify('--check', 'unit').returncode, 0)
+
+    def test_not_applicable_malformed_object_fails(self):
+        self.cfg['not_applicable'] = ['docs/DESIGN.md']
+        self.save()
+        self.assertNotEqual(self.run_verify('--check', 'unit').returncode, 0)
+
     def test_todo_document(self):
         (self.root/'docs/DESIGN.md').write_text('TODO_REQUIRED', encoding='utf-8')
         self.assertNotEqual(self.run_verify('--check','unit').returncode, 0)

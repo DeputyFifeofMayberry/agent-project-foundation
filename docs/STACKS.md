@@ -1,6 +1,6 @@
 # Stack-specific minimum verification sets
 
-These are practical **minimums** for configuring `.foundation/project.json` checks; riskier changes require more (`docs/TESTING.md`). Infrastructure checks (verifier self-tests, config validation) never substitute for the application checks below — a green gate is infrastructure health, not app acceptance (`docs/CHECKLISTS.md`). Adapt commands to the project's real toolchain and record them in the project configuration.
+These are practical **minimums** for configuring `.foundation/project.json` checks; riskier changes require more (`docs/TESTING.md`). Infrastructure checks (verifier self-tests, config validation) never substitute for the application checks below — a green gate is infrastructure health, not app acceptance (`docs/CHECKLISTS.md`). Adapt commands to the project's real toolchain and record them in the project configuration. Headless/API-only projects may declare `docs/DESIGN.md` or `docs/FRONTEND.md` not applicable via the fail-closed `not_applicable` mechanism in `.foundation/project.json` (`docs/COMPONENTS.md`); declaring NA never substitutes for any check on this page.
 
 ## Web apps (generic)
 

@@ -56,10 +56,14 @@ Classified and adapted during onboarding via the gap matrix (`docs/ADOPTION.md` 
 
 | Component | When required | Why |
 | --- | --- | --- |
-| `docs/DESIGN.md` + `docs/FRONTEND.md` | Any UI (web, desktop, mobile) | UI/UX contracts and device behavior; NA-justified for headless services. |
+| `docs/DESIGN.md` + `docs/FRONTEND.md` | Any UI (web, desktop, mobile) | UI/UX contracts and device behavior; headless/API-only projects declare them NA via the mechanism below. |
 | Stack-specific CI runners/jobs | Non-Linux targets (macOS/iOS, Windows) | App verification must run on the target OS (`docs/STACKS.md`). |
 | `.github/CODEOWNERS.example` | Orgs using GitHub review ownership | Guidance only; must be adapted to real ownership. |
 | `docs/orchestration/` | When Paperclip/Symphony is used | Orchestrator adapter contracts; neither is assumed installed. |
+
+### NA mechanism for stack-conditional documents
+
+`docs/DESIGN.md` and `docs/FRONTEND.md` — and only these two — may be declared not applicable by headless/API-only projects. Add an optional `not_applicable` object to `.foundation/project.json` mapping the document path to a non-empty reason string; `schema_version` stays 2 and configurations without the key are unaffected. Validation is fail-closed: paths outside the whitelist, empty or whitespace-only reasons, and malformed objects are rejected. A whitelisted document with a valid reason is treated as configured and need not exist; if the file still exists and contains `TODO_REQUIRED`, verification still fails — an NA declaration never coexists with unconfigured content. Active declarations are surfaced in `verify.py --list` and in CI output.
 
 ## Optional
 

@@ -29,6 +29,8 @@ MANDATORY_DOCS = (
     'CHANGELOG.md', 'docs/RUNBOOKS.md', 'docs/REVIEW_EVIDENCE.md', 'docs/TECH_DEBT.md',
     *PROJECT_DOCS,
 )
+# The only documents a project may declare not applicable (headless/API-only projects).
+NA_ELIGIBLE_DOCS = ('docs/DESIGN.md', 'docs/FRONTEND.md')
 MAX_TIMEOUT_SECONDS = 7200
 
 
@@ -36,15 +38,21 @@ def report_error(message: str) -> None:
     print('FAIL: ' + message, file=sys.stderr, flush=True)
 
 
-def docs_check() -> bool:
+def docs_check(config: dict) -> bool:
     errors = []
+    # Documents with a valid NA declaration are treated as configured; they need not
+    # exist. TODO_REQUIRED content in an existing NA document still fails (an NA
+    # declaration never coexists with unconfigured content).
+    na_docs = config.get('not_applicable') or {}
     for rel in MANDATORY_DOCS:
+        declared_na = rel in na_docs
         file = ROOT / rel
         if not file.is_file():
-            errors.append(f'Missing required documentation: {rel}')
+            if not declared_na:
+                errors.append(f'Missing required documentation: {rel}')
             continue
         content = file.read_text(encoding='utf-8')
-        if not content.strip():
+        if not content.strip() and not declared_na:
             errors.append(f'Empty required documentation: {rel}')
         if rel in PROJECT_DOCS and 'TODO_REQUIRED' in content:
             errors.append(f'Unconfigured project-specific documentation: {rel}')
@@ -103,6 +111,18 @@ def parse_config() -> dict:
         # Obvious no-ops are rejected. Meaningful test design still requires review.
         if argv[0].lower() in {'echo', 'true', ':'} or argv[1:2] in (['-c'], ['-e']):
             raise ValueError(f'{key}: apparent no-op/inline command not permitted; use a real project check')
+    # Optional NA declarations: whitelist-enforced and fail-closed. schema_version
+    # stays 2; configurations without this key are unaffected.
+    na = config.get('not_applicable')
+    if na is not None:
+        if not isinstance(na, dict):
+            raise ValueError('not_applicable must be an object mapping document path to reason')
+        for path in na:
+            reason = na[path]
+            if path not in NA_ELIGIBLE_DOCS:
+                raise ValueError('not_applicable: only ' + ', '.join(NA_ELIGIBLE_DOCS) + ' may be declared NA, not ' + str(path))
+            if not isinstance(reason, str) or not reason.strip():
+                raise ValueError(f'not_applicable: {path} requires a non-empty reason string')
     return config
 
 
@@ -158,13 +178,21 @@ def main() -> int:
         for key in REQUIRED:
             spec = checks.get(key, {})
             print(f'{key}: {spec.get("argv", []) if isinstance(spec, dict) else spec}')
+        na = raw.get('not_applicable')
+        if isinstance(na, dict) and na:
+            print('Not applicable (treated as configured; whitelist-enforced):')
+            for path in sorted(na):
+                print(f'  {path}: {na[path]}')
         return 0
     try:
         cfg = parse_config()
     except (OSError, ValueError, TypeError) as exc:
         report_error(str(exc))
         return 2
-    healthy = docs_check()
+    na = cfg.get('not_applicable') or {}
+    for path in sorted(na):
+        print(f'NA {path}: {na[path]}', flush=True)
+    healthy = docs_check(cfg)
     selected = [args.check] if args.check else list(REQUIRED)
     # Do not short-circuit: surface every failure while still returning nonzero.
     for name in selected:
