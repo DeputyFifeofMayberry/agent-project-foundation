@@ -5,64 +5,72 @@
     "lint": {
       "argv": [
         "python3",
-        "-c",
-        "print('ok')"
+        "-m",
+        "json.tool",
+        ".foundation/project.json"
       ],
       "timeout_seconds": 900
     },
     "typecheck": {
       "argv": [
         "python3",
-        "-c",
-        "print('ok')"
+        "-m",
+        "json.tool",
+        ".foundation/project.json"
       ],
       "timeout_seconds": 900
     },
     "unit": {
       "argv": [
         "python3",
-        "-c",
-        "print('ok')"
+        "-m",
+        "json.tool",
+        ".foundation/project.json"
       ],
       "timeout_seconds": 900
     },
     "integration": {
       "argv": [
         "python3",
-        "-c",
-        "print('ok')"
+        "-m",
+        "json.tool",
+        ".foundation/project.json"
       ],
       "timeout_seconds": 900
     },
     "e2e": {
       "argv": [
         "python3",
-        "-c",
-        "print('ok')"
+        "-m",
+        "json.tool",
+        ".foundation/project.json"
       ],
       "timeout_seconds": 900
     },
     "build": {
       "argv": [
         "python3",
-        "-c",
-        "print('ok')"
+        "-m",
+        "json.tool",
+        ".foundation/project.json"
       ],
       "timeout_seconds": 900
     },
     "security": {
       "argv": [
         "python3",
-        "-c",
-        "print('ok')"
+        "-m",
+        "json.tool",
+        ".foundation/project.json"
       ],
       "timeout_seconds": 900
     },
     "architecture": {
       "argv": [
         "python3",
-        "-c",
-        "print('ok')"
+        "-m",
+        "json.tool",
+        ".foundation/project.json"
       ],
       "timeout_seconds": 900
     }
