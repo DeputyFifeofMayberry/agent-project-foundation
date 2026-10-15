@@ -6,6 +6,10 @@ Use release-oriented entries, not commit-by-commit duplication. Git records exac
 
 ## Unreleased
 
+_Nothing yet._
+
+## v2.2 — 2026-10-15
+
 ### Changed
 
 - P1-1 — preflight disposable staging/commit test made data-safe (`docs/CHECKLISTS.md`): empty-staging precondition (`git diff --cached --quiet`), path-limited probe commit, recorded `orig_ref` return instead of `checkout -`, and a per-safeguard failure-mode explanation.
@@ -26,12 +30,20 @@ Use release-oriented entries, not commit-by-commit duplication. Git records exac
 - P3-8 — `docs/CHECKLISTS.md` preflight provenance generalized to production-incident phrasing; organization-internal ticket IDs stay in this changelog only.
 - P3-9 — `docs/RUNBOOKS.md` existing-app adoption reduced to a two-line summary pointing at `docs/ADOPTION.md`.
 - P3-10 — no-op denylist documented honestly as a heuristic in `docs/CHECKLISTS.md`/`docs/TESTING.md` (documentation only; `scripts/verify.py` unchanged).
+
+### Added
+
+- P1-3 — fail-closed `not_applicable` mechanism in `.foundation/project.json` for `docs/DESIGN.md` and `docs/FRONTEND.md` (path→non-empty reason; whitelist-enforced, no schema bump), surfaced in `--list`/CI and covered by negative selftest fixtures; explained in `docs/COMPONENTS.md`, `docs/STACKS.md`, and `README.md`.
+
+## v2.1
+
+### Changed
+
 - v2.1 finalization — ten permanent engineering standards codified into their owning documents (mapped in `docs/INDEX.md`): valid writable execution workspace before implementation; canonical preservation with changes in authorized isolated workspaces; version-controlled, independently maintained foundation content; implementation distinguished from verified application behavior; evidence tied to the exact tested content or commit; failed/unavailable tests never reported as passing; independently confirmed CI enforcement and branch protection; independent review + QA before foundation releases; recorded installed version and adaptations for every adoption; lessons evaluated for future foundation releases. Foundation released as tagged v2.1 from its dedicated version-controlled repository.
 - v2.1 foundation improvement pass — encoded first-adoption lessons across the seven board areas: (a) component inventory with required/stack-conditional/optional classes (`docs/COMPONENTS.md`); (b) stack-adaptive new-project initialization procedure in `SETUP_PROMPT.md`; (c) inspect-first existing-project adoption procedure with per-step exit criteria in `docs/ADOPTION.md`; (d) verification-by-design rules (acceptance criteria first, risk-based selection, read-only checkout rule, app-vs-infrastructure split, no weakening to pass) in `docs/CHECKLISTS.md` and `docs/BASELINE.md`; (e) stack-specific minimum verification sets (`docs/STACKS.md`); (f) persistent-knowledge documentation standards in `docs/INDEX.md`; (g) reusable-lessons process in `docs/HARNESS_MAINTENANCE.md`.
 - v2.0 audit: hardened verifier schema and self-tests, refreshed CI action versions, expanded user/onboarding/review guidance, corrected Paperclip security/retry assumptions, documented unresolved controls.
 
 ### Added
 
-- P1-3 — fail-closed `not_applicable` mechanism in `.foundation/project.json` for `docs/DESIGN.md` and `docs/FRONTEND.md` (path→non-empty reason; whitelist-enforced, no schema bump), surfaced in `--list`/CI and covered by negative selftest fixtures; explained in `docs/COMPONENTS.md`, `docs/STACKS.md`, and `README.md`.
 - Git-workspace preflight standard (board comment 719b0a4d; LOC-13 phases 18–19): eight permanent environment checks (valid HEAD; workspace exists; workspace writable; git administrative directories writable; staging and committing proven, not assumed; committed results persist outside temp workspaces; synchronization never discards modifications; isolated agents cannot overwrite each other's uncommitted work), a disposable staging/commit test procedure, and a stop-and-report-environment-blocker rule, codified in `docs/CHECKLISTS.md` after LOC-33 proved a read-only git metadata mount silently blocks staging (`index.lock` EROFS).
 - Agent Project Foundation scaffold, verification contract, and adoption guides (not yet configured for a target application).
