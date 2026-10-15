@@ -19,7 +19,7 @@ The repository, not a chat transcript, is the durable source of truth. Review ea
 | Orchestration | `orchestration/`, `agents/ORCHESTRATOR.md` | Paperclip/Symphony pilot changes |
 | Project baseline and owner instructions | `BASELINE.md`, `USER_GUIDE.md` | During onboarding and baseline changes |
 | Review evidence | `REVIEW_EVIDENCE.md` | On each substantive PR |
-| Harness upkeep | `HARNESS_MAINTENANCE.md` | Monthly or each release |
+| Harness upkeep | `HARNESS_MAINTENANCE.md` | Monthly, each release, and when the improvement-to-release process changes |
 | Component inventory (required/stack-conditional/optional) | `COMPONENTS.md` | During adoption and when adding or changing components |
 | Stack-specific minimum verification sets | `STACKS.md` | When choosing a stack or configuring checks |
 | Change checklists and verification-by-design rules | `CHECKLISTS.md` | When gate/checklist policy changes |
