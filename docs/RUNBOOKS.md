@@ -15,7 +15,7 @@ Check clean working tree, merged verified PRs, tag/version, changelog, compatibi
 
 ## Incident
 
-Stabilize or roll back, record timing and symptoms, preserve logs, reproduce, find root cause, add regression, update runbook and incident record. Never patch blindly for more than two attempts. If a secret may be leaked, revoke/rotate with authorization and audit access.
+Stabilize or roll back, record timing and symptoms, preserve logs, reproduce, find root cause, add regression, update runbook and incident record. Never patch blindly for more than two attempts (`docs/agents/DEBUGGING.md` is the canonical owner of this rule). If a secret may be leaked, revoke/rotate with authorization and audit access.
 
 ## Existing app adoption
 

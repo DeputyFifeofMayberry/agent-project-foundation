@@ -27,7 +27,7 @@ These states are separate. Do not let an agent substitute a Paperclip completion
 
 ## If an agent repeatedly breaks things
 
-Stop after two failed speculative repairs. Preserve logs, compare against last known working commit, require a reproducible failing test and root-cause report, and prohibit unrelated refactoring. If tests don't detect an important regression, improve the harness before continuing feature development.
+Stop after two failed speculative repairs (`docs/agents/DEBUGGING.md` is the canonical owner of this rule). Preserve logs, compare against last known working commit, require a reproducible failing test and root-cause report, and prohibit unrelated refactoring. If tests don't detect an important regression, improve the harness before continuing feature development.
 
 ## Who may approve what?
 

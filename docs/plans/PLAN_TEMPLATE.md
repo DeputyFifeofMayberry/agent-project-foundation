@@ -22,7 +22,7 @@ Record any new assumption, discovered constraint, dependency, and pivot here.
 
 ## Failure/recovery log
 
-After two unsuccessful speculative patches, stop and document a root-cause hypothesis and falsification experiment before more edits.
+After two unsuccessful speculative patches, stop and document a root-cause hypothesis and falsification experiment before more edits; `docs/agents/DEBUGGING.md` is the canonical owner of this rule.
 
 ## Completion
 

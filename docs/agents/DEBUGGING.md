@@ -7,3 +7,5 @@
 5. Make the smallest root-cause correction; rerun targeted and neighboring regression tests.
 6. If two attempted fixes have failed: pause editing, write root-cause report in the execution plan, expand instrumentation or seek a separate reviewer. Do not stack speculative patches.
 7. Confirm the exact user flow in the running app and record commit-bound evidence; see `docs/REVIEW_EVIDENCE.md`.
+
+This document is the canonical owner of the two-attempt escalation rule (step 6); other foundation documents keep the rule but reference this file as its owner rather than restating separate policy.
