@@ -56,7 +56,7 @@ Prove staging and committing on a disposable branch (or a disposable clone when 
 
 ```bash
 git diff --cached --quiet || { echo 'BLOCKED: staging area not empty' >&2; exit 1; }
-orig_ref=$(git rev-parse --abbrev-ref HEAD) || { echo 'BLOCKED: detached HEAD' >&2; exit 1; }
+orig_ref=$(git symbolic-ref --short HEAD) || { echo "BLOCKED: detached HEAD" >&2; exit 1; }
 git checkout -b preflight-probe
 echo probe > PROBE.txt
 git add PROBE.txt && git commit -m "preflight probe" -- PROBE.txt   # path-limited commit; must succeed; record SHA
