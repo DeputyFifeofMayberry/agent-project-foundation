@@ -1,37 +1,69 @@
 {
   "schema_version": 2,
-  "project_name": "TODO_REQUIRED",
+  "project_name": "ci-validation-negative",
   "checks": {
     "lint": {
-      "argv": [],
+      "argv": [
+        "python3",
+        "-c",
+        "print('ok')"
+      ],
       "timeout_seconds": 900
     },
     "typecheck": {
-      "argv": [],
+      "argv": [
+        "python3",
+        "-c",
+        "print('ok')"
+      ],
       "timeout_seconds": 900
     },
     "unit": {
-      "argv": [],
+      "argv": [
+        "python3",
+        "-c",
+        "print('ok')"
+      ],
       "timeout_seconds": 900
     },
     "integration": {
-      "argv": [],
+      "argv": [
+        "python3",
+        "-c",
+        "print('ok')"
+      ],
       "timeout_seconds": 900
     },
     "e2e": {
-      "argv": [],
+      "argv": [
+        "python3",
+        "-c",
+        "import sys; sys.exit(9)"
+      ],
       "timeout_seconds": 900
     },
     "build": {
-      "argv": [],
+      "argv": [
+        "python3",
+        "-c",
+        "print('ok')"
+      ],
       "timeout_seconds": 900
     },
     "security": {
-      "argv": [],
+      "argv": [
+        "python3",
+        "-c",
+        "print('ok')"
+      ],
       "timeout_seconds": 900
     },
     "architecture": {
-      "argv": [],
+      "argv": [
+        "python3",
+        "-c",
+        "print('ok')"
+      ],
       "timeout_seconds": 900
     }
   },
