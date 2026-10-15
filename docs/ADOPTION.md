@@ -4,7 +4,7 @@ Every adoption records the installed foundation version (see `../CHANGELOG.md`) 
 
 ## New application
 
-- [ ] Define a minimal product and first five acceptance journeys.
+- [ ] Define a minimal product and the first 3–5 acceptance journeys — the start of the journey ramp that grows to the 5–10 essential flows in `docs/PRODUCT.md`.
 - [ ] Choose stable, supported language, framework, package manager and runtime.
 - [ ] Fill project-specific docs, observed baseline (`docs/BASELINE.md`), and schema-v2 `.foundation/project.json`.
 - [ ] Implement real checks for all eight required categories or keep onboarding marked BLOCKED.

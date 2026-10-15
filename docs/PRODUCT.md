@@ -8,7 +8,7 @@
 
 ## Critical user journeys
 
-List the 5–10 essential flows, each with trigger, expected result, failure behavior, and automated test mapping.
+List the 5–10 essential flows, each with trigger, expected result, failure behavior, and automated test mapping. This is the end state of one journey ramp: adoption starts with 3–5 smoke journeys (`docs/ADOPTION.md`, `docs/RUNBOOKS.md`) and grows to this 5–10 set as coverage matures.
 
 | ID | User flow | Expected result | Failure/empty state | Test path | Last verified |
 | --- | --- | --- | --- | --- | --- |
