@@ -39,6 +39,7 @@ These standards are permanent board-directed rules for every project and for the
 | 8 | Foundation changes pass independent review and appropriate QA before release | `HARNESS_MAINTENANCE.md` (Lessons process; Foundation as a maintained product) |
 | 9 | Every adoption records the installed foundation version and project-specific adaptations | `ADOPTION.md` (head and checklists); `../README.md`; `../SETUP_PROMPT.md` |
 | 10 | Lessons learned are evaluated for incorporation into future foundation releases | `HARNESS_MAINTENANCE.md` (Lessons process) |
+| 11 | Git-workspace preflight (eight environment checks) before implementation | `CHECKLISTS.md` (Git-workspace preflight) |
 
 ## Documentation standards for persistent knowledge
 
