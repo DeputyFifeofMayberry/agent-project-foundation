@@ -10,7 +10,7 @@
 - Production build or platform build: TODO_REQUIRED
 - Architecture/security static checks: TODO_REQUIRED
 
-These eight required categories are enforced by `scripts/verify.py` reading schema v2 `.foundation/project.json`; removing a category from the config is invalid. Disabled or missing checks are treated as incomplete during `--ci`. Only configure real commands that fail on defective behavior. The verifier detects obvious no-ops but cannot establish test meaningfulness automatically; reviewers must examine test behavior. Do not replace tests with `echo pass` or equivalent.
+These eight required categories are enforced by `scripts/verify.py` reading schema v2 `.foundation/project.json`; removing a category from the config is invalid. Disabled or missing checks are treated as incomplete during `--ci`. Only configure real commands that fail on defective behavior. The verifier rejects apparent no-ops with a heuristic denylist — it is not exhaustive, and passing it does not establish that a test is meaningful; reviewers must examine test behavior. Do not replace tests with `echo pass` or equivalent.
 
 ## Test design
 
