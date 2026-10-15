@@ -30,10 +30,13 @@ _Nothing yet._
 - P3-8 — `docs/CHECKLISTS.md` preflight provenance generalized to production-incident phrasing; organization-internal ticket IDs stay in this changelog only.
 - P3-9 — `docs/RUNBOOKS.md` existing-app adoption reduced to a two-line summary pointing at `docs/ADOPTION.md`.
 - P3-10 — no-op denylist documented honestly as a heuristic in `docs/CHECKLISTS.md`/`docs/TESTING.md` (documentation only; `scripts/verify.py` unchanged).
+- `.gitignore` expanded from minimal exclusions to curated coverage of supported tooling (Python, Node.js, Swift/Xcode), operating-system artifacts, editor local state with shared configuration preserved, local agent/orchestration runtime state, and secret material; lockfiles and `.env.example` remain tracked.
+- Maintenance documentation updated for the public operating model: the publication home is the public repository `DeputyFifeofMayberry/agent-project-foundation` with enforced `main` protection (pull-request-only integration, required `verify` check, no force pushes or deletions, administrators included) and protected `v2.*` release tags.
 
 ### Added
 
 - P1-3 — fail-closed `not_applicable` mechanism in `.foundation/project.json` for `docs/DESIGN.md` and `docs/FRONTEND.md` (path→non-empty reason; whitelist-enforced, no schema bump), surfaced in `--list`/CI and covered by negative selftest fixtures; explained in `docs/COMPONENTS.md`, `docs/STACKS.md`, and `README.md`.
+- Foundation-maintenance CI job `maintenance` in `.github/workflows/verify.yml`: runs the verifier self-test (positive and negative fixtures) and configuration sanity, giving the repository a green, meaningful gate for the reusable foundation itself; adopter-application verification (`verify`) remains fail-closed until real project checks are configured.
 - Git-workspace preflight standard (board comment 719b0a4d; LOC-13 phases 18–19): eight permanent environment checks (valid HEAD; workspace exists; workspace writable; git administrative directories writable; staging and committing proven, not assumed; committed results persist outside temp workspaces; synchronization never discards modifications; isolated agents cannot overwrite each other's uncommitted work), a disposable staging/commit test procedure, and a stop-and-report-environment-blocker rule, codified in `docs/CHECKLISTS.md` after LOC-33 proved a read-only git metadata mount silently blocks staging (`index.lock` EROFS).
 
 ## v2.1
