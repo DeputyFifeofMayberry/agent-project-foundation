@@ -36,3 +36,33 @@ Unverified assumptions; insufficient test coverage; failure of mandatory checks;
 - Read-only checkout rule: verification must pass on a read-only checkout. Checks must not write bytecode, caches, or artifacts into the source tree (disable bytecode writing or route outputs to designated untracked paths). A check that cannot run in read-only mode is FAIL/BLOCKED, never success.
 - App-vs-infrastructure split: classify every check as validating the **application** or the **foundation infrastructure**. A green gate proves infrastructure health only and is never application verification. Stack-specific verification must not be satisfiable by infrastructure-only checks (see `docs/STACKS.md`; for native iOS/macOS, Linux-runnable checks alone never verify the app).
 - No weakening to pass: tests, lint, CI, verifier configuration, or their expected results must not be edited, removed, skipped, downgraded to warnings, or loosened to obtain a passing outcome. Such changes require explicit human approval and their own review evidence.
+
+## Git-workspace preflight (permanent standard)
+
+Established after LOC-33/LOC-34 (fifecode-ios): a workspace whose working tree is writable but whose git metadata sits on a read-only mount silently blocks staging (`index.lock: Read-only file system`), so "files written" is not evidence that a commit is possible. Run all eight checks **before** implementation, and re-run whenever the workspace, its mount, or host environment changes:
+
+1. **Valid HEAD** — `git rev-parse HEAD` resolves to a real commit; record the SHA and expect it to match the task's authorized baseline.
+2. **Execution workspace exists** — the assigned workspace path is the intended checkout/clone (not an empty default agent directory); confirm the intended branch.
+3. **Workspace writable** — create and remove a probe file in the working tree.
+4. **Git administrative directories writable** — create and remove a probe file **inside `.git`** (this is where `index.lock` and other locks live; a read-only mount fails here even when checks 1–3 pass). Record the filesystem state, e.g. `findmnt -T <repo>` showing `rw`.
+5. **Staging and committing supported** — prove the full write path with the disposable test below; never assume it from checks 3–4.
+6. **Committed results persist outside temporary workspaces** — the repository (`.git` and working tree) lives in persistent storage (project or agent-home data), not a recreated-per-run temp workspace, so commits survive workspace recycling.
+7. **Workspace synchronization will not discard modifications** — before any tooling-driven sync, clean, rebase, or checkout, confirm from current evidence (`git status --porcelain`) that uncommitted work survives it; destructive resets/cleans/force-checkouts over dirty state are prohibited without explicit authorization.
+8. **Isolated agents cannot overwrite each other's uncommitted work** — each agent works in its own isolated worktree/clone; before touching a workspace, confirm any dirty state belongs to you (or is preserved untouched); never overwrite another agent's changes.
+
+### Disposable staging/commit test
+
+Prove staging and committing on a disposable branch (or a disposable clone when the target branch is protected/shared), record the outputs, then discard the probe:
+
+```bash
+git checkout -b preflight-probe
+echo probe > PROBE.txt
+git add PROBE.txt && git commit -m "preflight probe"   # must succeed; record SHA
+git checkout - && git branch -D preflight-probe         # discard probe; workspace returns to baseline
+```
+
+Use a designated persistent scratch location for any disposable clone (never a read-only or per-run temp path). A probe that succeeds elsewhere does not certify the target workspace — checks 3–4 must still pass there.
+
+### Preflight failure is an environment blocker
+
+If any check fails: **stop**. Do not implement, do not work around with destructive git operations, and do not report partial success. Record the exact command, the exact error (e.g. `index.lock: Read-only file system`), the filesystem evidence, and the next action on the assigned issue, classified **BLOCKED**; wait for an authorized resolution (e.g. a persistent writable repository) before continuing.

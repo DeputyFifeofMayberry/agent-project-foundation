@@ -14,4 +14,5 @@ Use release-oriented entries, not commit-by-commit duplication. Git records exac
 
 ### Added
 
+- Git-workspace preflight standard (board comment 719b0a4d; LOC-13 phases 18–19): eight permanent environment checks (valid HEAD; workspace exists; workspace writable; git administrative directories writable; staging and committing proven, not assumed; committed results persist outside temp workspaces; synchronization never discards modifications; isolated agents cannot overwrite each other's uncommitted work), a disposable staging/commit test procedure, and a stop-and-report-environment-blocker rule, codified in `docs/CHECKLISTS.md` after LOC-33 proved a read-only git metadata mount silently blocks staging (`index.lock` EROFS).
 - Agent Project Foundation scaffold, verification contract, and adoption guides (not yet configured for a target application).
