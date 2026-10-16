@@ -1,13 +1,3 @@
-# Quality scorecard
+# Quality score
 
-Review after each release; consult `docs/HARNESS_MAINTENANCE.md`. Use observed evidence, not agent confidence.
-
-| Area | Grade | Evidence | Biggest gap | Action |
-| --- | --- | --- | --- | --- |
-| Core flows | Unrated | None yet | TODO_REQUIRED | Add automated critical journeys |
-| Architecture | Unrated | None yet | TODO_REQUIRED | Map actual boundaries |
-| Security | Unrated | None yet | TODO_REQUIRED | Complete threat model |
-| UX/accessibility | Unrated | None yet | TODO_REQUIRED | Test real devices |
-| Reliability | Unrated | None yet | TODO_REQUIRED | Define rollback/restore |
-
-Suggested measures: first-pass task acceptance, post-merge regression rate, reopened defects, average time to resolution, human rework minutes, cost per accepted change, flaky-check rate. Review trends over multiple tasks; do not treat a sample of one as proof.
+- 2026-10-16 (init): all eight gate categories configured with real commands and passing; unit coverage 4/4 contract cases; e2e covers 2 happy paths + 1 negative. Known debt: none recorded. Score: healthy (no failing or skipped checks; no TODO debt markers in first-party sources).

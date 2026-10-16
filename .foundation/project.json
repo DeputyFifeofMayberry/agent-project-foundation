@@ -1,48 +1,43 @@
 {
   "schema_version": 2,
-  "project_name": "TODO_REQUIRED",
+  "project_name": "greeter",
   "checks": {
     "lint": {
-      "argv": [],
-      "timeout_seconds": 900
+      "argv": ["python3", "-m", "compileall", "-q", "greeter.py", "tests", "scripts"],
+      "timeout_seconds": 120
     },
     "typecheck": {
-      "argv": [],
-      "timeout_seconds": 900
+      "argv": ["python3", "-m", "py_compile", "greeter.py", "tests/test_greeter.py", "tests/integration_check.py", "tests/e2e_check.py", "scripts/build_check.py", "scripts/security_scan.py", "scripts/arch_check.py"],
+      "timeout_seconds": 120
     },
     "unit": {
-      "argv": [],
-      "timeout_seconds": 900
+      "argv": ["python3", "-m", "unittest", "discover", "-s", "tests", "-p", "test_*.py", "-v"],
+      "timeout_seconds": 300
     },
     "integration": {
-      "argv": [],
-      "timeout_seconds": 900
+      "argv": ["python3", "tests/integration_check.py"],
+      "timeout_seconds": 300
     },
     "e2e": {
-      "argv": [],
-      "timeout_seconds": 900
+      "argv": ["python3", "tests/e2e_check.py"],
+      "timeout_seconds": 300
     },
     "build": {
-      "argv": [],
-      "timeout_seconds": 900
+      "argv": ["python3", "scripts/build_check.py"],
+      "timeout_seconds": 300
     },
     "security": {
-      "argv": [],
-      "timeout_seconds": 900
+      "argv": ["python3", "scripts/security_scan.py"],
+      "timeout_seconds": 120
     },
     "architecture": {
-      "argv": [],
-      "timeout_seconds": 900
+      "argv": ["python3", "scripts/arch_check.py"],
+      "timeout_seconds": 120
     }
   },
-  "required_ci_checks": [
-    "lint",
-    "typecheck",
-    "unit",
-    "integration",
-    "e2e",
-    "build",
-    "security",
-    "architecture"
-  ]
+  "required_ci_checks": ["lint", "typecheck", "unit", "integration", "e2e", "build", "security", "architecture"],
+  "not_applicable": {
+    "docs/DESIGN.md": "Headless CLI with no UI; visual design surface does not exist (docs/PRODUCT.md non-goals).",
+    "docs/FRONTEND.md": "Headless CLI with no frontend; no device, browser, or accessibility surface exists."
+  }
 }

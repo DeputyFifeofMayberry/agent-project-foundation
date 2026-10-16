@@ -1,30 +1,30 @@
 # Product specification
 
-- Project: TODO_REQUIRED
-- Target users: TODO_REQUIRED
-- Problem and intended outcome: TODO_REQUIRED
-- Non-goals: TODO_REQUIRED
-- Platforms and minimum supported versions: TODO_REQUIRED
+- Project: greeter — minimal CLI greeting utility (foundation-validation reference app)
+- Target users: developers validating the Agent Project Foundation initialization flow
+- Problem and intended outcome: provide a deterministic, dependency-free greeting command whose behavior is fully covered by automated checks; outcome: a trustworthy reference for verifying the foundation gate
+- Non-goals: localization, i18n, persistence, network access, GUI
+- Platforms and minimum supported versions: Python 3.10+ (stdlib only), WSL Linux; no other platforms declared
 
 ## Critical user journeys
 
-List the 5–10 essential flows, each with trigger, expected result, failure behavior, and automated test mapping. This is the end state of one journey ramp: adoption starts with 3–5 smoke journeys (`docs/ADOPTION.md`, `docs/RUNBOOKS.md`) and grows to this 5–10 set as coverage matures.
-
 | ID | User flow | Expected result | Failure/empty state | Test path | Last verified |
 | --- | --- | --- | --- | --- | --- |
-| UJ-001 | TODO_REQUIRED | TODO_REQUIRED | TODO_REQUIRED | TODO_REQUIRED | Not verified |
+| UJ-001 | Run `python greeter.py --name Ada` | prints `Hello, Ada!`, exit 0 | non-zero exit with stderr message | `tests/e2e_check.py` | 2026-10-16 |
+| UJ-002 | Run `python greeter.py` without `--name` | argparse usage error, exit != 0 | same (missing required arg) | `tests/e2e_check.py` negative case | 2026-10-16 |
+| UJ-003 | Blank/whitespace name passed | `error: name must be a non-empty string` on stderr, exit 2 | same | `tests/test_greeter.py::test_empty_name_raises` | 2026-10-16 |
 
 ## Functional contract
 
-Create a feature spec in `specs/` for each significant feature. Specify authorization, persistence, offline/restart effects, edge cases, and observable acceptance conditions before coding.
+The full functional contract for `greet()` is specified in `specs/greet.md`. Greeting format: `Hello, <trimmed name>!<default punctuation>`; empty-after-trim names are rejected.
 
 ## Constraints
 
-- Privacy/data retention: TODO_REQUIRED
-- Supported device sizes/input modes: TODO_REQUIRED
-- Accessibility expectations: TODO_REQUIRED
-- Performance expectations: TODO_REQUIRED
+- Privacy/data retention: no data collected or persisted
+- Supported device sizes/input modes: CLI text only
+- Accessibility expectations: n/a (headless CLI); plain-text output
+- Performance expectations: single invocation < 1s on reference environment
 
 ## Acceptance principle
 
-Passing tests alone does not establish that the product meets the owner's intent. Require a separate product acceptance decision for significant changes; document who accepted it and whether acceptance occurred on the target device.
+Passing tests alone do not establish owner intent; acceptance of significant changes is recorded separately in `docs/REVIEW_EVIDENCE.md`.

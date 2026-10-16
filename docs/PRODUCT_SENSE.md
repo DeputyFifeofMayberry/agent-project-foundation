@@ -1,7 +1,3 @@
-# Product judgment and scope
+# Product sense
 
-Prioritize clear workflows that solve real user problems over feature count. Prefer the smallest understandable change. Maintain visual/behavioral consistency with the existing application. Do not invent user preferences or silently decide tradeoffs with permanent consequences.
-
-Before a major feature ask: Who needs it? Which journey changes? What would failure look like? What existing behavior must remain? Is a simpler alternative sufficient? Record decisions in the relevant feature spec. Avoid turning the product spec into an unverifiable wish list.
-
-**Project-specific principles:** TODO_REQUIRED
+greeter succeeds when a developer can greet a named person in one command with a predictable, tested output. The product feel is intentionally minimal: instant startup, no configuration, clear errors on stderr with non-zero exits. Feedback that would change the product: complaints about output format, unexpected exit codes, or startup latency. Everything else is out of scope by `docs/PRODUCT.md` non-goals.
