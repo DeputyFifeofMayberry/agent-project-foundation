@@ -1,4 +1,4 @@
-# Agent Project Foundation v2.1 — audited starter
+# Agent Project Foundation v2.2.1 — audited starter
 
 A reusable, agent-neutral engineering harness for **new or existing** software repositories. Designed to be used with OpenCode, Codex, Superpowers, Paperclip, or Symphony when those tools are separately installed and configured. It is an engineering **foundation**, not a coding agent, and does not claim to eliminate bugs.
 
@@ -15,7 +15,7 @@ Keep product intent, engineering decisions, verification evidence, and change hi
 5. Configure `.foundation/project.json` schema v2 with real `argv` arrays and per-check timeouts. All eight categories are mandatory; each must run a meaningful check. Do not use a command that merely prints success. Headless/API-only projects may additionally declare `docs/DESIGN.md` or `docs/FRONTEND.md` as not applicable through the optional `not_applicable` object (path → non-empty reason; whitelist-enforced and fail-closed — see `docs/COMPONENTS.md`).
 6. Run `python scripts/selftest_verify.py` (tests the verifier), `python scripts/verify.py --list`, then `python scripts/verify.py --ci` (Windows: `py -3 scripts/verify.py --ci`). Expect failure until initialization is complete.
 7. Test that a deliberately failing app test blocks verification and the pull request. Restore the test afterward.
-8. Configure the GitHub ruleset described in `docs/RUNBOOKS.md` to require the `verify` job on `main`; this must be done in GitHub, not in repository Markdown. Independently confirm the enforcement (for example, an observed rejected push or blocked PR) rather than inferring it from repository files.
+8. Configure the GitHub ruleset described in `docs/RUNBOOKS.md` (GitHub setup) to require the check that validates this repository's actual purpose — the foundation home requires `maintenance`; an adopting application requires its configured `verify` check after adoption. This must be done in GitHub, not in repository Markdown. Independently confirm enforcement on both paths (a blocked failing PR and a successful protected merge) rather than inferring it from repository files.
 9. Have the agent implement one small real feature or bug fix. Require reproducible evidence, a regression test where appropriate, and independent acceptance before merge.
 
 **Where the adoption instructions live:** new projects follow `SETUP_PROMPT.md` (stack-adaptive initialization procedure); existing projects follow the inspect-first procedure in `docs/ADOPTION.md`; stack-specific minimum verification sets are in `docs/STACKS.md`; the required/stack-conditional/optional component inventory is in `docs/COMPONENTS.md`. Every adoption must record the installed foundation version and its project-specific adaptations (`docs/ADOPTION.md`, standard 9).
@@ -36,7 +36,7 @@ Keep product intent, engineering decisions, verification evidence, and change hi
 - `docs/specs/`: feature contracts; `docs/plans/`: active and completed execution plans.
 - `docs/decisions/`: durable architectural decision records.
 - `docs/QUALITY_SCORE.md`, `docs/TECH_DEBT.md`: ongoing improvement queue.
-- `docs/agents/`: intake, builder, reviewer, debugging and handoff contracts.
+- `docs/agents/`: intake, builder, reviewer, debugging and handoff contracts; test/QA standards live in `docs/TESTING.md`.
 - `docs/orchestration/`: Paperclip and Symphony adapters; neither is assumed installed.
 - `.foundation/project.json` and `scripts/verify.py`: configured executable checks.
 - `.github/workflows/verify.yml`: independent CI runner. A **green CI status does not imply product acceptance**; manual/human or approved agent product review remains separately necessary.

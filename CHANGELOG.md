@@ -8,6 +8,24 @@ Use release-oriented entries, not commit-by-commit duplication. Git records exac
 
 _Nothing yet._
 
+## v2.2.1 — 2026-10-15
+
+Correction release for the required-check guidance (observed failure: the hosted `main` protection required the `verify` status check, which is intentionally fail-closed red until an adopting project configures real checks, so the foundation home deadlocked — no ordinary maintenance change could merge through the protected workflow — and the misconfiguration was masked by a bypass instead of corrected; one-sided enforcement evidence, a blocked failing PR alone, had been accepted as verification). Rules that prevent recurrence, owned canonically by `docs/RUNBOOKS.md` (GitHub setup): required checks must validate the repository's actual purpose (foundation home: `maintenance`; adopting application: its configured `verify` check after adoption), enforcement is verified only with both a successful and a failing change, and any bypass requires explicit authorization, documented rationale, restoration evidence, and defect evaluation — a bypass never proves the normal workflow functions.
+
+### Changed
+
+- `docs/RUNBOOKS.md` GitHub setup is the single canonical owner of the required-check rule, the foundation-vs-adopter distinction, both-path enforcement verification, and the bypass policy; other documents reference it instead of restating it. GitHub setup step 3 no longer mandates the `verify` check for every repository, and `docs/HARNESS_MAINTENANCE.md` step 7 (Publication) requires `maintenance` for the foundation home rather than hard-coding `verify`.
+- `docs/CHECKLISTS.md`, `docs/ADOPTION.md`, and `docs/REVIEW_EVIDENCE.md` aligned by reference: release evidence must show invalid changes blocked, valid changes merging through the normal protected workflow, no dependence on bypassing controls, exact required checks matching configured workflows, and checks remaining functional after publication.
+- `README.md`: stale v2.1 heading updated to the current version; start-here step 8 points at the canonical rule instead of a universal `verify` requirement.
+
+### Added
+
+- `scripts/check_required_checks.py`: fail-closed local validation that each required check name matches exactly one configured workflow job and that the job's run steps pass on the current tree; nonexistent names, ambiguous matches, failing jobs, matrix/conditional/otherwise locally-unverifiable jobs, and unsupported workflow content all fail closed.
+- Permanent lightweight regression coverage in `scripts/selftest_verify.py` for protected-branch scenarios (c) unconfigured adopter fails closed, (d) configured adopter passes, (f) nonexistent required check fails, (g) red required check fails release readiness; hosted scenarios (a), (b), and the merge-block half of (e) are documented in `docs/RUNBOOKS.md` (GitHub setup step 6) and mapped per scenario in `docs/TESTING.md`.
+- Agent-contract additions: `docs/agents/IMPLEMENTER.md` (confirm required checks match the intended workflow, demonstrate successful integration without a bypass, escalate workflow defects), `docs/agents/REVIEWER.md` (independently confirm effective protections and required checks on both paths, reject one-sided evidence), `docs/agents/ORCHESTRATOR.md` (acceptance covers operational success and failure, cross-component configuration reviewed as one system, no acceptance while a workaround conceals a defect, corrections must address the original failure), and QA duties in `docs/TESTING.md` (positive and negative protected-branch integration tests on the actual release workflow; flag bypass-dependent releases).
+
+Backward compatible: documentation plus additive local coverage only; no `MANDATORY_DOCS`, schema, or gate-behavior changes. CI architecture confirmed unchanged: one workflow, two jobs — the foundation home requires the green `maintenance` job; the `verify` job stays fail-closed red until an adopter configures real checks and only adopters require it.
+
 ## v2.2 — 2026-10-15
 
 ### Changed
