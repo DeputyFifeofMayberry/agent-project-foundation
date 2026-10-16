@@ -10,3 +10,4 @@ This protocol applies to Paperclip, Symphony, or other coordinators; it does not
 6. Use limited concurrency by default, short-lived scoped credentials, nonzero run timeouts, and no production secrets in untrusted agent environments.
 7. Never auto-merge a task with failed/missing checks, blocked review, unapproved destructive operations, or ambiguous application test evidence.
 8. If review and implementation occur in different environments, compare commit SHA and reproduce required checks from clean checkout.
+9. For protected-branch releases, verify acceptance criteria cover operational success and failure, review cross-component configuration (workflows, protections, and their documentation) as one complete system, prevent acceptance when a workaround conceals a defect, and require proof that corrections address the original failure (`docs/RUNBOOKS.md`, GitHub setup, owns the rule).

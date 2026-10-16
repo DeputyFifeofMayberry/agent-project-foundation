@@ -169,5 +169,123 @@ class VerifierTests(unittest.TestCase):
         self.save()
         self.assertEqual(self.run_verify('--list').returncode, 0)
 
+FIXTURE_WORKFLOW = """\
+name: Fixture
+on: [push]
+jobs:
+  maintenance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Passing step
+        run: python scripts/fixture_ok.py
+      - name: Passing block step
+        run: |
+          python scripts/fixture_ok.py
+          python scripts/fixture_ok.py
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Passing step
+        run: python scripts/fixture_ok.py
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Failing step
+        run: python scripts/fixture_bad.py
+  matrixjob:
+    strategy:
+      matrix:
+        python: ['3.11', '3.12']
+    runs-on: ubuntu-latest
+    steps:
+      - run: python scripts/fixture_ok.py
+  conditional:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: python scripts/fixture_ok.py
+  usesonly:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+"""
+
+class RequiredChecksTests(unittest.TestCase):
+    """Protected-branch regression scenarios (c), (d), (f), (g); scenarios (a), (b), and the hosted half of (e) need GitHub enforcement and are executed per docs/RUNBOOKS.md (GitHub setup step 6)."""
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        workflow_dir = self.root/'.github/workflows'
+        workflow_dir.mkdir(parents=True)
+        (workflow_dir/'ci.yml').write_text(FIXTURE_WORKFLOW, encoding='utf-8')
+        (self.root/'scripts').mkdir()
+        (self.root/'scripts/fixture_ok.py').write_text('raise SystemExit(0)\n', encoding='utf-8')
+        (self.root/'scripts/fixture_bad.py').write_text('print("deliberate failure"); raise SystemExit(9)\n', encoding='utf-8')
+
+    def run_check(self, *args):
+        return subprocess.run(
+            [sys.executable, str(Path(__file__).resolve().parent/'check_required_checks.py'),
+             '--root', str(self.root), *args],
+            capture_output=True, text=True, cwd=str(self.root), timeout=120,
+        )
+
+    def test_configured_required_check_passes(self):
+        result = self.run_check('--required', 'maintenance', '--timeout-seconds', '60')
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn('OK maintenance', result.stdout)
+
+    def test_multiple_required_names_pass(self):
+        result = self.run_check('--required', 'maintenance,lint', '--timeout-seconds', '60')
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_nonexistent_required_check_fails(self):
+        result = self.run_check('--required', 'nonexistent')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('nonexistent', result.stderr)
+
+    def test_red_required_check_fails_release_readiness(self):
+        result = self.run_check('--required', 'verify')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('fails on the current tree', result.stderr)
+
+    def test_matrix_job_not_locally_verifiable(self):
+        result = self.run_check('--required', 'matrixjob')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('matrix strategy', result.stderr)
+
+    def test_conditional_job_not_locally_verifiable(self):
+        result = self.run_check('--required', 'conditional')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('conditional', result.stderr)
+
+    def test_uses_only_job_not_locally_verifiable(self):
+        result = self.run_check('--required', 'usesonly')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('no runnable', result.stderr)
+
+    def test_missing_workflow_directory_fails_closed(self):
+        for path in (self.root/'.github/workflows/ci.yml',):
+            path.unlink()
+        (self.root/'.github/workflows').rmdir()
+        self.assertNotEqual(self.run_check('--required', 'maintenance').returncode, 0)
+
+    def test_unconfigured_adopter_verify_fails_closed(self):
+        script = self.root/'scripts/verify.py'
+        script.write_bytes((BASE/'scripts/verify.py').read_bytes())
+        workflow_dir = self.root/'.github/workflows'
+        (workflow_dir/'ci.yml').unlink()
+        (workflow_dir/'ci.yml').write_text(
+            FIXTURE_WORKFLOW.replace('python scripts/fixture_bad.py', 'python scripts/verify.py --ci'),
+            encoding='utf-8',
+        )
+        result = self.run_check('--required', 'verify', '--timeout-seconds', '60')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('fails on the current tree', result.stderr)
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

@@ -9,7 +9,7 @@ Every adoption records the installed foundation version (see `../CHANGELOG.md`) 
 - [ ] Fill project-specific docs, observed baseline (`docs/BASELINE.md`), and schema-v2 `.foundation/project.json`.
 - [ ] Implement real checks for all eight required categories or keep onboarding marked BLOCKED.
 - [ ] Run `python scripts/selftest_verify.py` and confirm app `--ci` fails on an intentional regression.
-- [ ] Set protected-branch rules before agents merge changes.
+- [ ] Set protected-branch rules before agents merge changes; require the check that validates the repository's actual purpose (an adopting application requires its configured `verify` check only after configuration — canonical rule: `docs/RUNBOOKS.md`, GitHub setup).
 - [ ] Record the installed foundation version and the project-specific adaptations in `docs/BASELINE.md`.
 - [ ] Add a task using `docs/agents/TASK_INTAKE_CRAFT.md`.
 
@@ -26,4 +26,4 @@ The single ordered source for adopting the foundation into an existing repositor
 7. **Commit gating.** Commits, merges, and pushes are human-approved. The agent deliverable is a documented exact commit plan (files, order, messages), not an executed integration into shared branches. *Exit:* commit plan approved through the authorized path before integration.
 8. **Paperclip gating (note).** Wire Paperclip only after a direct coding-agent run reliably builds and tests the app in the adopted repository; orchestration tooling comes after that baseline exists, not before.
 
-**Readiness condition:** required markers replaced, commands configured, negative test verified to fail, branch ruleset independently verified, installed foundation version and adaptations recorded.
+**Readiness condition:** required markers replaced, commands configured, negative test verified to fail, branch ruleset independently verified on both the failing and the succeeding path (`docs/RUNBOOKS.md`, GitHub setup), installed foundation version and adaptations recorded.
