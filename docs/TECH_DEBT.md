@@ -5,3 +5,5 @@ For every deferred issue include an owner or responsible role, severity, reprodu
 | ID | Problem and evidence | Impact | Priority | Next action | Status |
 | --- | --- | --- | --- | --- | --- |
 | — | No project audit performed yet | Unknown | Audit | Establish baseline | Open |
+
+<!-- QA LOC-46 Test F green-path probe; disposable branch, closed without merging -->
