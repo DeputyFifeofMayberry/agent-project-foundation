@@ -18,7 +18,7 @@ def evaluate(tokens: list[str]) -> list[float]:
             if token == "+":
                 stack.append(left + right)
             elif token == "-":
-                stack.append(left - right)
+                stack.append(right - left)
             elif token == "*":
                 stack.append(left * right)
             else:
