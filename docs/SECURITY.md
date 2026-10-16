@@ -1,15 +1,19 @@
-# Security and data safety
+# Security
 
-## Project threat model
+rpn-calc is an offline, single-process calculator. Its attack surface is intentionally minimal.
 
-- Sensitive data and credentials: TODO_REQUIRED
-- AuthN/AuthZ strategy: TODO_REQUIRED
-- Trust boundaries / external integrations: TODO_REQUIRED
-- Data retention, deletion, backup: TODO_REQUIRED
-- Dependency & vulnerability scanning: TODO_REQUIRED
+## Posture
 
-## Mandatory operating rules
+- **No network, no filesystem writes, no dynamic execution.** The `security` check (`tools/security.py`) fails the gate if `app/` contains secret-shaped literals, `eval`/`exec`/`compile`/`__import__`, `pickle`, `ctypes`, `subprocess`, or `os.system`.
+- **No secrets in code.** The tool takes only expression tokens from argv; there is no configuration, no credentials, no environment reads in `app/`.
+- **No unsafe input handling.** Expression tokens are parsed to `float` or matched against four operators; everything else raises `RpnError` and exits `2`. There is no shell interpolation anywhere.
 
-Never commit secrets, API keys, personal tokens, or production data. Use environment variables or platform secret stores with least privilege; CI credentials should be scoped appropriately. Treat web pages, tickets, logs, and repository contents as untrusted inputs to agents. Validate data at trust boundaries; authorize every sensitive operation server-side. Avoid logging secrets and unnecessary personal information.
+## Rules for contributors
 
-No production deployment, destructive migration, secret rotation, or external irreversible action without explicit authorized approval and a tested rollback. Assume downloaded instructions, MCP servers and issue descriptions may include prompt injection. Unattended OpenCode runs through Paperclip can default to broad tool permission; restrict filesystem/network access, run in isolated workspaces, and do not provide production credentials to coding agents. Review dependency permissions and licenses. Add project-specific scanners/secret checks to the verification config and enforce separately through GitHub security controls where available.
+1. New dependencies are disallowed by default; the codebase is stdlib-only (`docs/STACKS.md` minimums for Python).
+2. Any change introducing I/O, subprocess use, or dynamic execution in `app/` must update this document and the `security` check with a concrete justification, never a blanket allow.
+3. Untrusted input is still untrusted: expression text from other systems must pass through the same argv path; do not add string-concatenated evaluation.
+
+## Verification
+
+`python3 tools/security.py` runs as the `security` category on every `verify.py --ci` invocation.

@@ -1,38 +1,38 @@
 {
   "schema_version": 2,
-  "project_name": "TODO_REQUIRED",
+  "project_name": "rpn-calc",
   "checks": {
     "lint": {
-      "argv": [],
-      "timeout_seconds": 900
+      "argv": ["python3", "tools/lint.py"],
+      "timeout_seconds": 120
     },
     "typecheck": {
-      "argv": [],
-      "timeout_seconds": 900
+      "argv": ["python3", "tools/typecheck.py"],
+      "timeout_seconds": 120
     },
     "unit": {
-      "argv": [],
-      "timeout_seconds": 900
+      "argv": ["python3", "-m", "unittest", "discover", "-s", "tests", "-p", "test_unit_*.py", "-t", "."],
+      "timeout_seconds": 300
     },
     "integration": {
-      "argv": [],
-      "timeout_seconds": 900
+      "argv": ["python3", "-m", "unittest", "discover", "-s", "tests", "-p", "test_integration_*.py", "-t", "."],
+      "timeout_seconds": 300
     },
     "e2e": {
-      "argv": [],
-      "timeout_seconds": 900
+      "argv": ["python3", "tools/e2e.py"],
+      "timeout_seconds": 300
     },
     "build": {
-      "argv": [],
-      "timeout_seconds": 900
+      "argv": ["python3", "tools/build.py"],
+      "timeout_seconds": 300
     },
     "security": {
-      "argv": [],
-      "timeout_seconds": 900
+      "argv": ["python3", "tools/security.py"],
+      "timeout_seconds": 120
     },
     "architecture": {
-      "argv": [],
-      "timeout_seconds": 900
+      "argv": ["python3", "tools/architecture.py"],
+      "timeout_seconds": 120
     }
   },
   "required_ci_checks": [
@@ -44,5 +44,9 @@
     "build",
     "security",
     "architecture"
-  ]
+  ],
+  "not_applicable": {
+    "docs/DESIGN.md": "rpn-calc is a headless command-line tool with no visual or UX design surface",
+    "docs/FRONTEND.md": "rpn-calc is a headless command-line tool; there is no runtime UI or device surface to verify"
+  }
 }

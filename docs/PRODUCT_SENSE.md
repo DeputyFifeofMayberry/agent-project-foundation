@@ -1,7 +1,12 @@
-# Product judgment and scope
+# Product sense
 
-Prioritize clear workflows that solve real user problems over feature count. Prefer the smallest understandable change. Maintain visual/behavioral consistency with the existing application. Do not invent user preferences or silently decide tradeoffs with permanent consequences.
+rpn-calc exists because the smallest useful calculator is also the easiest calculator to verify: a pure token stream, no precedence table, no hidden state.
 
-Before a major feature ask: Who needs it? Which journey changes? What would failure look like? What existing behavior must remain? Is a simpler alternative sufficient? Record decisions in the relevant feature spec. Avoid turning the product spec into an unverifiable wish list.
+Decisions this implies:
 
-**Project-specific principles:** TODO_REQUIRED
+- **Errors are values, not crashes.** Any invalid expression exits `2` with one stderr line; stdout stays clean for pipelines.
+- **The stack is the output.** Printing the whole final stack (not just the top) keeps multi-result expressions observable.
+- **Integers print as integers.** `7.0` renders as `7` so shell arithmetic feels native; genuine fractions keep full precision.
+- **Headless by design.** There is no UI surface, so `docs/DESIGN.md` and `docs/FRONTEND.md` are declared not applicable in `.foundation/project.json` with explicit reasons, per the whitelist mechanism in `docs/COMPONENTS.md`.
+
+When in doubt, add capability to the engine and keep the CLI contract (one line out, exit code) frozen.

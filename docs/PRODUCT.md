@@ -1,30 +1,23 @@
-# Product specification
+# Product
 
-- Project: TODO_REQUIRED
-- Target users: TODO_REQUIRED
-- Problem and intended outcome: TODO_REQUIRED
-- Non-goals: TODO_REQUIRED
-- Platforms and minimum supported versions: TODO_REQUIRED
+rpn-calc evaluates reverse-polish notation (RPN) expressions from the command line.
 
-## Critical user journeys
+## Job to be done
 
-List the 5–10 essential flows, each with trigger, expected result, failure behavior, and automated test mapping. This is the end state of one journey ramp: adoption starts with 3–5 smoke journeys (`docs/ADOPTION.md`, `docs/RUNBOOKS.md`) and grows to this 5–10 set as coverage matures.
+A developer or operator wants to compute an expression in one shell command without leaving the terminal and without operator-precedence ambiguity. RPN removes parentheses entirely: operands first, operator after.
 
-| ID | User flow | Expected result | Failure/empty state | Test path | Last verified |
-| --- | --- | --- | --- | --- | --- |
-| UJ-001 | TODO_REQUIRED | TODO_REQUIRED | TODO_REQUIRED | TODO_REQUIRED | Not verified |
+## Essential flows
 
-## Functional contract
+1. **Happy path:** `python3 -m app 3 4 +` prints `7` and exits `0`.
+2. **Compound expression:** `python3 -m app 5 1 2 + 4 * + 3 -` prints `14` (the classic Dijkstra example) and exits `0`.
+3. **Evaluation error:** `python3 -m app 2 0 /` prints `error: division by zero` on stderr and exits `2`.
+4. **Usage error:** `python3 -m app` with no tokens prints usage on stderr and exits `2`.
 
-Create a feature spec in `specs/` for each significant feature. Specify authorization, persistence, offline/restart effects, edge cases, and observable acceptance conditions before coding.
+## Non-goals
 
-## Constraints
+- No interactive REPL, no floating-point formatting options, no operator extensions (`%`, `^`) in this baseline.
+- No persistent history or config files: the tool is a pure function of its arguments.
 
-- Privacy/data retention: TODO_REQUIRED
-- Supported device sizes/input modes: TODO_REQUIRED
-- Accessibility expectations: TODO_REQUIRED
-- Performance expectations: TODO_REQUIRED
+## Quality bar
 
-## Acceptance principle
-
-Passing tests alone does not establish that the product meets the owner's intent. Require a separate product acceptance decision for significant changes; document who accepted it and whether acceptance occurred on the target device.
+The `unit` category covers engine semantics including error cases; `integration` covers CLI-plus-engine behavior in-process; `e2e` launches the real CLI in subprocesses. See `docs/TESTING.md` and `docs/BASELINE.md` for the verification contract.

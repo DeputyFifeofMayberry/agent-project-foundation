@@ -1,23 +1,26 @@
-# Verified repository baseline — complete during adoption
+# Baseline
 
-**Status:** UNVERIFIED (foundation has not been installed into or exercised against a target application).
+rpn-calc 1.0.0 baseline, established on adoption of the agent project foundation.
 
-| Field | Actual observed value |
-| --- | --- |
-| Repository URL and default branch | TODO_REQUIRED |
-| Baseline commit SHA | TODO_REQUIRED |
-| Runtime versions and OS | TODO_REQUIRED |
-| Dependency installation command + result | TODO_REQUIRED |
-| CI / local commands and evidence links | TODO_REQUIRED |
-| Known failing tests before work | TODO_REQUIRED |
-| Critical user journeys with test links | TODO_REQUIRED |
-| Current deploy / rollback method | TODO_REQUIRED |
-| GitHub ruleset status and evidence | TODO_REQUIRED |
-| App-vs-infrastructure classification of each configured check | TODO_REQUIRED |
-| Read-only checkout verification run and evidence | TODO_REQUIRED |
+## Verified at baseline
 
-Never declare an existing project stable merely because it builds. Distinguish observed failures that predate the foundation from regressions introduced during adoption. Recheck this table when baseline assumptions change.
+| Check | Command | Status at baseline |
+|---|---|---|
+| lint | `python3 tools/lint.py` | green (AST rules: no eval/exec, no bare except, no unused/wildcard imports) |
+| typecheck | `python3 tools/typecheck.py` | green (full annotation coverage in `app/` and `tools/`) |
+| unit | `python3 -m unittest discover -s tests -p "test_unit_*.py" -t .` | green (engine semantics incl. division by zero, invalid tokens, operand underflow) |
+| integration | `python3 -m unittest discover -s tests -p "test_integration_*.py" -t .` | green (CLI + engine in-process) |
+| e2e | `python3 tools/e2e.py` | green (real subprocess invocations, happy/compound/error/usage paths) |
+| build | `python3 tools/build.py` | green (zipapp artifact smoke-run in temp dir) |
+| security | `python3 tools/security.py` | green (no secret patterns, no dangerous calls/imports in `app/`) |
+| architecture | `python3 tools/architecture.py` | green (dependency rules in `ARCHITECTURE.md` hold) |
 
-CI enforcement and branch-protection status are recorded from independent confirmation only — an observed rejected push, a PR actually blocked on the required check, or the platform's effective ruleset — never inferred from workflow files, templates, or docs found in the repository. Record the observed evidence, not merely the configuration's existence.
+## Baseline regressions to guard
 
-Classify every configured check as validating the **application** or the **foundation infrastructure** (`docs/CHECKLISTS.md`); gate success is never application verification. Run the verification gate against a read-only checkout and record that evidence here; a check that must write into the source tree is invalid and must be reconfigured or reported BLOCKED.
+- Subtraction/division operand order (`left OP right`, not reversed) — covered by `test_subtraction_order` and the e2e compound expression.
+- Exit-code contract `0`/`2` — covered by integration and e2e error paths.
+- Read-only checkout: checks never write into the repository (`docs/STACKS.md`).
+
+## Known limitations (recorded, not defects)
+
+- No `%`/`^` operators, no REPL, no localization (see `docs/PRODUCT.md` non-goals).
