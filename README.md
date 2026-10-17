@@ -1,4 +1,4 @@
-# Agent Project Foundation v2.2.1 — audited starter
+# Agent Project Foundation v2.2.2 — audited starter
 
 A reusable, agent-neutral engineering harness for **new or existing** software repositories. Designed to be used with OpenCode, Codex, Superpowers, Paperclip, or Symphony when those tools are separately installed and configured. It is an engineering **foundation**, not a coding agent, and does not claim to eliminate bugs.
 
