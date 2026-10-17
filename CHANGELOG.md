@@ -15,10 +15,12 @@ Correction release for required-check validator scoping (observed failure: an un
 ### Fixed
 
 - `scripts/check_required_checks.py` now parses workflow files independently and validates only the workflows that implement the configured required checks (matched by job id or job name from the check context); unrelated workflow files are left unvalidated, reported with a `NOTE` line instead of failing the gate. Fail-closed semantics are preserved: a required check that no parsable workflow implements still fails through the normal no-match path, and a workflow file that declares a configured required check but cannot be validated fails immediately.
+- Required-check classification respects explicit job display names and inline YAML comments, and fails closed on unreadable workflows: a job id that matches a required check but declares a different display name (e.g. `verify:` plus `name: Deploy previews`) is no longer recorded as that required check; `name: verify # comment` compares as `verify` in both parsed and unparsed classification; a workflow file that cannot be read is an immediate validation failure instead of an empty unrelated classification.
 
 ### Added
 
 - Regression coverage in `scripts/selftest_verify.py`: an unrelated workflow with a step-level secrets `env:` block no longer fails the required-check gate, while a required-check workflow with the same content still fails closed.
+- Regression coverage in `scripts/selftest_verify.py` for the classification edge cases above: display-name mismatch not recorded as the required check, inline-comment job name matched, and unreadable workflow file fails closed.
 - `docs/ADOPTION.md`: CRLF-safe adoption packaging guidance — regenerate the delta on the canonical LF base and verify tree equivalence before delivery — for adopters whose local histories store CRLF line endings.
 - `docs/RUNBOOKS.md`: strict-protection merge-cascade runbook step — branches fall behind after each protected merge, dependent branches are updated in waves, and `--admin` merges never substitute for correcting the cascade.
 

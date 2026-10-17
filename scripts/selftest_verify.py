@@ -2,6 +2,7 @@
 """Adversarial regression tests for the project verifier; no real repo files edited."""
 from __future__ import annotations
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -227,6 +228,30 @@ jobs:
         run: echo uploaded
 """
 
+DISPLAY_NAME_MISMATCH_WORKFLOW = """\
+name: Deploy previews
+on: [push]
+jobs:
+  verify:
+    name: Deploy previews
+    environment: preview
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo deployed
+"""
+
+INLINE_COMMENT_NAME_WORKFLOW = """\
+name: Duplicate verify
+on: [push]
+jobs:
+  verifydup:
+    name: verify # duplicate check
+    environment: preview
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo duplicate
+"""
+
 class RequiredChecksTests(unittest.TestCase):
     """Protected-branch regression scenarios (c), (d), (f), (g); scenarios (a), (b), and the hosted half of (e) need GitHub enforcement and are executed per docs/RUNBOOKS.md (GitHub setup step 6)."""
 
@@ -322,6 +347,41 @@ class RequiredChecksTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('maintenance', result.stderr)
         self.assertIn('cannot be validated', result.stderr)
+
+    def test_display_name_mismatch_not_recorded_as_required_check(self):
+        (self.root/'.github/workflows'/'ci.yml').write_text(
+            FIXTURE_WORKFLOW.replace('python scripts/fixture_bad.py', 'python scripts/fixture_ok.py'),
+            encoding='utf-8')
+        (self.root/'.github/workflows'/'deploy.yml').write_text(
+            DISPLAY_NAME_MISMATCH_WORKFLOW, encoding='utf-8')
+        result = self.run_check('--required', 'maintenance,verify', '--timeout-seconds', '60')
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn('deploy.yml', result.stdout)
+        self.assertIn('not validated', result.stdout)
+
+    def test_inline_comment_job_name_matches_required_check(self):
+        (self.root/'.github/workflows'/'duplicate.yml').write_text(
+            INLINE_COMMENT_NAME_WORKFLOW, encoding='utf-8')
+        result = self.run_check('--required', 'verify')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('duplicate.yml', result.stderr)
+        self.assertIn('cannot be validated', result.stderr)
+
+    @unittest.skipIf(hasattr(os, 'geteuid') and os.geteuid() == 0,
+                     'root can read files regardless of permission mode')
+    def test_unreadable_workflow_fails_closed(self):
+        unreadable = self.root/'.github/workflows'/'restricted.yml'
+        unreadable.write_text(
+            'name: Restricted\non: [push]\njobs:\n  other:\n    runs-on: ubuntu-latest\n'
+            '    steps:\n      - run: echo restricted\n', encoding='utf-8')
+        unreadable.chmod(0)
+        try:
+            result = self.run_check('--required', 'maintenance', '--timeout-seconds', '60')
+        finally:
+            unreadable.chmod(0o644)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('restricted.yml', result.stderr)
+        self.assertIn('cannot be read', result.stderr)
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
