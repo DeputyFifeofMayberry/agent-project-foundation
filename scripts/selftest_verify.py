@@ -213,6 +213,20 @@ jobs:
       - uses: actions/checkout@v7
 """
 
+UNRELATED_STEP_ENV_WORKFLOW = """\
+name: Adopter-owned release checks
+on: [push]
+jobs:
+  testflight:
+    name: TestFlight upload
+    runs-on: ubuntu-latest
+    steps:
+      - name: Upload to TestFlight
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+        run: echo uploaded
+"""
+
 class RequiredChecksTests(unittest.TestCase):
     """Protected-branch regression scenarios (c), (d), (f), (g); scenarios (a), (b), and the hosted half of (e) need GitHub enforcement and are executed per docs/RUNBOOKS.md (GitHub setup step 6)."""
 
@@ -286,6 +300,28 @@ class RequiredChecksTests(unittest.TestCase):
         result = self.run_check('--required', 'verify', '--timeout-seconds', '60')
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('fails on the current tree', result.stderr)
+
+    def test_unrelated_workflow_step_env_does_not_fail_gate(self):
+        (self.root/'.github/workflows'/'check-testflight.yml').write_text(
+            UNRELATED_STEP_ENV_WORKFLOW, encoding='utf-8')
+        result = self.run_check('--required', 'maintenance', '--timeout-seconds', '60')
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn('not validated', result.stdout)
+
+    def test_required_check_workflow_step_env_fails_closed(self):
+        (self.root/'.github/workflows/ci.yml').write_text(
+            FIXTURE_WORKFLOW.replace(
+                '  maintenance:\n    runs-on: ubuntu-latest\n    steps:\n'
+                '      - uses: actions/checkout@v7\n        with:\n          persist-credentials: false\n'
+                '      - name: Passing step\n        run: python scripts/fixture_ok.py\n',
+                '  maintenance:\n    runs-on: ubuntu-latest\n    steps:\n'
+                '      - name: Sign build\n        env:\n          API_KEY: ${{ secrets.API_KEY }}\n'
+                '        run: python scripts/fixture_ok.py\n'),
+            encoding='utf-8')
+        result = self.run_check('--required', 'maintenance')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('maintenance', result.stderr)
+        self.assertIn('cannot be validated', result.stderr)
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

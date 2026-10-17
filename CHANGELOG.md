@@ -8,6 +8,20 @@ Use release-oriented entries, not commit-by-commit duplication. Git records exac
 
 _Nothing yet._
 
+## v2.2.2 — 2026-10-16
+
+Correction release for required-check validator scoping (observed failure: an unrelated workflow file that uses GitHub features outside the validator's supported subset — for example an adopter-owned workflow with a step-level `env:` block mapping secrets — failed the whole required-check gate even though it implemented none of the configured required checks, so adopters' own workflows broke the template's validation).
+
+### Fixed
+
+- `scripts/check_required_checks.py` now parses workflow files independently and validates only the workflows that implement the configured required checks (matched by job id or job name from the check context); unrelated workflow files are left unvalidated, reported with a `NOTE` line instead of failing the gate. Fail-closed semantics are preserved: a required check that no parsable workflow implements still fails through the normal no-match path, and a workflow file that declares a configured required check but cannot be validated fails immediately.
+
+### Added
+
+- Regression coverage in `scripts/selftest_verify.py`: an unrelated workflow with a step-level secrets `env:` block no longer fails the required-check gate, while a required-check workflow with the same content still fails closed.
+- `docs/ADOPTION.md`: CRLF-safe adoption packaging guidance — regenerate the delta on the canonical LF base and verify tree equivalence before delivery — for adopters whose local histories store CRLF line endings.
+- `docs/RUNBOOKS.md`: strict-protection merge-cascade runbook step — branches fall behind after each protected merge, dependent branches are updated in waves, and `--admin` merges never substitute for correcting the cascade.
+
 ## v2.2.1 — 2026-10-15
 
 Correction release for the required-check guidance (observed failure: the hosted `main` protection required the `verify` status check, which is intentionally fail-closed red until an adopting project configures real checks, so the foundation home deadlocked — no ordinary maintenance change could merge through the protected workflow — and the misconfiguration was masked by a bypass instead of corrected; one-sided enforcement evidence, a blocked failing PR alone, had been accepted as verification). Rules that prevent recurrence, owned canonically by `docs/RUNBOOKS.md` (GitHub setup): required checks must validate the repository's actual purpose (foundation home: `maintenance`; adopting application: its configured `verify` check after adoption), enforcement is verified only with both a successful and a failing change, and any bypass requires explicit authorization, documented rationale, restoration evidence, and defect evaluation — a bypass never proves the normal workflow functions.
