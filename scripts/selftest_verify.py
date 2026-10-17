@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 """Adversarial regression tests for the project verifier; no real repo files edited."""
 from __future__ import annotations
+import importlib.util
+import io
 import json
-import os
 from pathlib import Path
 import subprocess
 import sys
 import tempfile
 import unittest
+from contextlib import redirect_stderr
+from unittest import mock
 
 BASE = Path(__file__).resolve().parents[1]
 NAMES = ('lint', 'typecheck', 'unit', 'integration', 'e2e', 'build', 'security', 'architecture')
@@ -367,21 +370,33 @@ class RequiredChecksTests(unittest.TestCase):
         self.assertIn('duplicate.yml', result.stderr)
         self.assertIn('cannot be validated', result.stderr)
 
-    @unittest.skipIf(hasattr(os, 'geteuid') and os.geteuid() == 0,
-                     'root can read files regardless of permission mode')
     def test_unreadable_workflow_fails_closed(self):
         unreadable = self.root/'.github/workflows'/'restricted.yml'
         unreadable.write_text(
             'name: Restricted\non: [push]\njobs:\n  other:\n    runs-on: ubuntu-latest\n'
             '    steps:\n      - run: echo restricted\n', encoding='utf-8')
-        unreadable.chmod(0)
-        try:
-            result = self.run_check('--required', 'maintenance', '--timeout-seconds', '60')
-        finally:
-            unreadable.chmod(0o644)
-        self.assertNotEqual(result.returncode, 0)
-        self.assertIn('restricted.yml', result.stderr)
-        self.assertIn('cannot be read', result.stderr)
+        script_path = Path(__file__).resolve().parent/'check_required_checks.py'
+        spec = importlib.util.spec_from_file_location('check_required_checks_injected', script_path)
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[spec.name] = module
+        spec.loader.exec_module(module)
+        original_read_text = Path.read_text
+
+        def injected_read_text(path_self, *args, **kwargs):
+            if path_self.name == 'restricted.yml':
+                raise OSError(13, 'simulated unreadable workflow (injected fault)')
+            return original_read_text(path_self, *args, **kwargs)
+
+        stderr = io.StringIO()
+        with mock.patch.object(Path, 'read_text', injected_read_text):
+            with redirect_stderr(stderr):
+                returncode = module.main(
+                    ['--root', str(self.root), '--required', 'maintenance',
+                     '--timeout-seconds', '60'])
+        self.assertNotEqual(returncode, 0)
+        self.assertIn('restricted.yml', stderr.getvalue())
+        self.assertIn('cannot be read', stderr.getvalue())
+        self.assertIn('simulated unreadable workflow (injected fault)', stderr.getvalue())
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
